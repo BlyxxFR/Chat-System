@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.langram.main.Controller">
+   <children>
+      <Pane prefHeight="80.0" prefWidth="325.0" style="-fx-background-color: #004d40;">
+         <children>
+            <MaterialDesignIconView fill="WHITE" glyphName="ACCOUNT" layoutX="30.0" layoutY="58.0" size="48" text="" />
+            <MaterialDesignIconView fill="WHITE" glyphName="POWER" layoutX="244.0" layoutY="58.0" size="48" />
+            <MaterialDesignIconView fill="WHITE" glyphName="SETTINGS" layoutX="139.0" layoutY="58.0" size="48" />
+         </children></Pane>
+      <Pane layoutY="80.0" prefHeight="420.0" prefWidth="325.0" style="-fx-background-color: #00695c;" />
+      <FontAwesomeIconView fill="#004d40" glyphName="CLOSE" layoutX="975.0" layoutY="25.0" onMouseClicked="#CloseApplication" size="16" />
+   </children>
+</AnchorPane>
