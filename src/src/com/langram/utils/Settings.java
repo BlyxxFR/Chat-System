@@ -21,8 +21,14 @@ public class Settings {
     public static Locale getLocale() { return locale; }
 
     // @return int Application Width
-    public static int getDefaultWidth() { return 1000; }
+    public static int getDefaultWidth() { return 1024; }
 
     // @return int Application Height
-    public static int getDefaultHeight() { return 500; }
+    public static int getDefaultHeight() { return 768; }
+
+    // @return int Application Login Width
+    public static int getLoginWidth() { return 365; }
+
+    // @return int Application Login Height
+    public static int getLoginHeight() { return 500; }
 }
