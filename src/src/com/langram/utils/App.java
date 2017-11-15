@@ -2,22 +2,26 @@ package com.langram.utils;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.JavaFXBuilderFactory;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
+import java.util.ResourceBundle;
+
 public abstract class App extends Application {
 
     private Stage stage;
     private static App instance;
+    private static ResourceBundle globalMessages;
 
     // Screen offsets
     private double x = 0;
     private double y = 0;
 
     public App() {
+        Settings.init();
+        globalMessages = ResourceBundle.getBundle("GlobalMessagesBundle", Settings.getLocale());
         instance = this;
     }
     public static App getInstance() {
@@ -34,6 +38,7 @@ public abstract class App extends Application {
             stage.setWidth(width);
             stage.setHeight(height);
         }
+        stage.setTitle(Settings.getAppName() + " - " + globalMessages.getString("titleWindow"));
         registerMouseEvents(root);
         return root;
     }
