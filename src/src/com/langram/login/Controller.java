@@ -1,18 +1,13 @@
 package com.langram.login;
 
-import com.langram.main.Main;
-import com.langram.utils.App;
 import com.langram.utils.CommonController;
 import com.langram.utils.Settings;
 import javafx.event.ActionEvent;
-import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.input.MouseEvent;
 
 import java.net.URL;
 import java.util.ResourceBundle;
-import java.util.Set;
 
 public class Controller extends CommonController implements javafx.fxml.Initializable {
 
