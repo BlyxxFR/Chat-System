@@ -10,9 +10,9 @@ import javafx.scene.Scene;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
-public class ResizeHelper {
+class ResizeHelper {
 
-    public static void addResizeListener(Stage stage) {
+    static void addResizeListener(Stage stage) {
         ResizeListener resizeListener = new ResizeListener(stage);
         stage.getScene().addEventHandler(MouseEvent.MOUSE_MOVED, resizeListener);
         stage.getScene().addEventHandler(MouseEvent.MOUSE_PRESSED, resizeListener);
@@ -25,7 +25,7 @@ public class ResizeHelper {
         }
     }
 
-    public static void addListenerDeeply(Node node, EventHandler<MouseEvent> listener) {
+    private static void addListenerDeeply(Node node, EventHandler<MouseEvent> listener) {
         node.addEventHandler(MouseEvent.MOUSE_MOVED, listener);
         node.addEventHandler(MouseEvent.MOUSE_PRESSED, listener);
         node.addEventHandler(MouseEvent.MOUSE_DRAGGED, listener);
@@ -47,7 +47,7 @@ public class ResizeHelper {
         private double startX = 0;
         private double startY = 0;
 
-        public ResizeListener(Stage stage) {
+        ResizeListener(Stage stage) {
             this.stage = stage;
         }
 
@@ -61,7 +61,7 @@ public class ResizeHelper {
                     sceneWidth = scene.getWidth(),
                     sceneHeight = scene.getHeight();
 
-            if (MouseEvent.MOUSE_MOVED.equals(mouseEventType) == true) {
+            if (MouseEvent.MOUSE_MOVED.equals(mouseEventType)) {
                 if (mouseEventX < border && mouseEventY < border) {
                     cursorEvent = Cursor.NW_RESIZE;
                 } else if (mouseEventX < border && mouseEventY > sceneHeight - border) {
@@ -82,16 +82,16 @@ public class ResizeHelper {
                     cursorEvent = Cursor.DEFAULT;
                 }
                 scene.setCursor(cursorEvent);
-            } else if(MouseEvent.MOUSE_EXITED.equals(mouseEventType) || MouseEvent.MOUSE_EXITED_TARGET.equals(mouseEventType)){
+            } else if (MouseEvent.MOUSE_EXITED.equals(mouseEventType) || MouseEvent.MOUSE_EXITED_TARGET.equals(mouseEventType)) {
                 scene.setCursor(Cursor.DEFAULT);
-            } else if (MouseEvent.MOUSE_PRESSED.equals(mouseEventType) == true) {
+            } else if (MouseEvent.MOUSE_PRESSED.equals(mouseEventType)) {
                 startX = stage.getWidth() - mouseEventX;
                 startY = stage.getHeight() - mouseEventY;
-            } else if (MouseEvent.MOUSE_DRAGGED.equals(mouseEventType) == true) {
-                if (Cursor.DEFAULT.equals(cursorEvent) == false) {
-                    if (Cursor.W_RESIZE.equals(cursorEvent) == false && Cursor.E_RESIZE.equals(cursorEvent) == false) {
+            } else if (MouseEvent.MOUSE_DRAGGED.equals(mouseEventType)) {
+                if (!Cursor.DEFAULT.equals(cursorEvent)) {
+                    if (!Cursor.W_RESIZE.equals(cursorEvent) && !Cursor.E_RESIZE.equals(cursorEvent)) {
                         double minHeight = Settings.getDefaultHeight();
-                        if (Cursor.NW_RESIZE.equals(cursorEvent) == true || Cursor.N_RESIZE.equals(cursorEvent) == true || Cursor.NE_RESIZE.equals(cursorEvent) == true) {
+                        if (Cursor.NW_RESIZE.equals(cursorEvent) || Cursor.N_RESIZE.equals(cursorEvent) || Cursor.NE_RESIZE.equals(cursorEvent)) {
                             if (stage.getHeight() > minHeight || mouseEventY < 0) {
                                 stage.setHeight(stage.getY() - mouseEvent.getScreenY() + stage.getHeight());
                                 stage.setY(mouseEvent.getScreenY());
@@ -103,9 +103,9 @@ public class ResizeHelper {
                         }
                     }
 
-                    if (Cursor.N_RESIZE.equals(cursorEvent) == false && Cursor.S_RESIZE.equals(cursorEvent) == false) {
+                    if (!Cursor.N_RESIZE.equals(cursorEvent) && !Cursor.S_RESIZE.equals(cursorEvent)) {
                         double minWidth = Settings.getDefaultWidth();
-                        if (Cursor.NW_RESIZE.equals(cursorEvent) == true || Cursor.W_RESIZE.equals(cursorEvent) == true || Cursor.SW_RESIZE.equals(cursorEvent) == true) {
+                        if (Cursor.NW_RESIZE.equals(cursorEvent) || Cursor.W_RESIZE.equals(cursorEvent) || Cursor.SW_RESIZE.equals(cursorEvent)) {
                             if (stage.getWidth() > minWidth || mouseEventX < 0) {
                                 stage.setWidth(stage.getX() - mouseEvent.getScreenX() + stage.getWidth());
                                 stage.setX(mouseEvent.getScreenX());

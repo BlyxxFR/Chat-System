@@ -1,50 +1,72 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?scenebuilder-stylesheet scrollbar.css?>
+
 <?import com.jfoenix.controls.JFXTextArea?>
-<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import de.jensd.fx.glyphs.fontawesome.*?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
-
-<AnchorPane minHeight="568.0" minWidth="1024.0" style="-fx-background-color: #36393e;" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.langram.main.Controller">
-    <AnchorPane prefHeight="68.0" prefWidth="275.0" style="-fx-background-color: #2e3136;" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="25.0">
-        <ImageView fx:id="profileImage" fitHeight="48.0" fitWidth="48.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="10.0">
-            <Image url="@images/default-user.png" />
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" minHeight="568.0" minWidth="1024.0"
+            style="-fx-background-color: #36393e;" xmlns="http://javafx.com/javafx/8.0.141"
+            fx:controller="com.langram.main.Controller">
+    <AnchorPane prefHeight="68.0" prefWidth="275.0" style="-fx-background-color: #2e3136;" AnchorPane.leftAnchor="0.0"
+                AnchorPane.topAnchor="25.0">
+        <ImageView fx:id="profileImage" fitHeight="48.0" fitWidth="48.0" pickOnBounds="true" preserveRatio="true"
+                   AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="10.0">
+            <Image url="@images/default-user.png"/>
         </ImageView>
     </AnchorPane>
-    <AnchorPane layoutY="100.0" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="275.0" style="-fx-background-color: #2e3136;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="93.0">
-        <Label fx:id="projectsText" prefHeight="4.0" prefWidth="136.0" textFill="#95a5a6" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="25.0">
+    <AnchorPane layoutY="100.0" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="275.0"
+                style="-fx-background-color: #2e3136;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
+                AnchorPane.topAnchor="93.0">
+        <Label fx:id="projectsText" prefHeight="4.0" prefWidth="136.0" textFill="#95a5a6" AnchorPane.leftAnchor="25.0"
+               AnchorPane.topAnchor="25.0">
             <font>
-                <Font name="Lato Regular" size="16.0" />
+                <Font name="Lato Regular" size="16.0"/>
             </font>
         </Label>
     </AnchorPane>
-    <Pane maxHeight="-Infinity" minHeight="-Infinity" nodeOrientation="RIGHT_TO_LEFT" prefHeight="26.0" style="-fx-background-color: #1e2124;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+    <Pane maxHeight="-Infinity" minHeight="-Infinity" nodeOrientation="RIGHT_TO_LEFT" prefHeight="26.0"
+          style="-fx-background-color: #1e2124;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+          AnchorPane.topAnchor="0.0">
         <AnchorPane>
-            <FontAwesomeIconView fx:id="settingsButton" fill="#66686c" glyphName="GEAR" onMouseClicked="#OpenSettings" size="16" AnchorPane.leftAnchor="60.0" AnchorPane.topAnchor="5.0" />
+            <FontAwesomeIconView fx:id="settingsButton" fill="#66686c" glyphName="GEAR" onMouseClicked="#OpenSettings"
+                                 size="16" AnchorPane.leftAnchor="60.0" AnchorPane.topAnchor="5.0"/>
         </AnchorPane>
-      <AnchorPane>
-         <children>
-            <FontAwesomeIconView fx:id="maximizeButton" fill="#66686c" glyphName="WINDOW_MAXIMIZE" onMouseClicked="#MaximizeApplication" size="14" AnchorPane.leftAnchor="35.0" AnchorPane.topAnchor="6.0" />
-         </children>
-      </AnchorPane>
         <AnchorPane>
-            <FontAwesomeIconView fx:id="closeButton" fill="#66686c" glyphName="CLOSE" onMouseClicked="#CloseApplication" size="16" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="5.0" />
+            <FontAwesomeIconView fx:id="maximizeButton" fill="#66686c" glyphName="WINDOW_MAXIMIZE"
+                                 onMouseClicked="#MaximizeApplication" size="14" AnchorPane.leftAnchor="35.0"
+                                 AnchorPane.topAnchor="6.0"/>
+        </AnchorPane>
+        <AnchorPane>
+            <FontAwesomeIconView fx:id="closeButton" fill="#66686c" glyphName="CLOSE" onMouseClicked="#CloseApplication"
+                                 size="16" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="5.0"/>
         </AnchorPane>
     </Pane>
-    <AnchorPane layoutX="275.0" layoutY="26.0" prefWidth="752.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="275.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="26.0">
-        <AnchorPane maxWidth="-Infinity" minHeight="-Infinity" prefHeight="68.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
-            <Pane prefHeight="2.0" style="-fx-background-color: #2e3136;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
+    <AnchorPane layoutX="275.0" layoutY="26.0" prefWidth="752.0" AnchorPane.bottomAnchor="0.0"
+                AnchorPane.leftAnchor="275.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="26.0">
+        <AnchorPane maxWidth="-Infinity" minHeight="-Infinity" prefHeight="68.0" AnchorPane.leftAnchor="0.0"
+                    AnchorPane.rightAnchor="0.0">
+            <Pane prefHeight="2.0" style="-fx-background-color: #2e3136;" AnchorPane.bottomAnchor="0.0"
+                  AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"/>
         </AnchorPane>
-        <AnchorPane maxHeight="-Infinity" minHeight="-Infinity" prefHeight="150.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
-            <AnchorPane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #424549; -fx-border-color: #6d6e73; -fx-background-radius: 5; -fx-border-radius: 5;" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
-                <JFXTextArea fx:id="textMessage" layoutX="48.0" layoutY="12.0" prefHeight="108.0" prefWidth="671.0" style="-fx-background-color: #424549; -fx-text-fill: #66686c;" unFocusColor="#5f6a83" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0" />
-                <FontAwesomeIconView fx:id="sendFile" fill="#66686c" glyphName="UPLOAD" size="16" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="47.0" />
-                <FontAwesomeIconView fx:id="sendMessage" fill="#66686c" glyphName="SEND" size="16" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="25.0" />
+        <AnchorPane maxHeight="-Infinity" minHeight="-Infinity" prefHeight="150.0" AnchorPane.bottomAnchor="0.0"
+                    AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+            <AnchorPane prefHeight="200.0" prefWidth="200.0"
+                        style="-fx-background-color: #424549; -fx-border-color: #6d6e73; -fx-background-radius: 5; -fx-border-radius: 5;"
+                        AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0"
+                        AnchorPane.topAnchor="10.0">
+                <JFXTextArea fx:id="textMessage" layoutX="48.0" layoutY="12.0" prefHeight="108.0" prefWidth="671.0"
+                             style="-fx-background-color: #424549; -fx-text-fill: #66686c;" unFocusColor="#5f6a83"
+                             AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0"
+                             AnchorPane.topAnchor="10.0"/>
+                <FontAwesomeIconView fx:id="sendFile" fill="#66686c" glyphName="UPLOAD" size="16"
+                                     AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="47.0"/>
+                <FontAwesomeIconView fx:id="sendMessage" fill="#66686c" glyphName="SEND" size="16"
+                                     AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="25.0"/>
             </AnchorPane>
         </AnchorPane>
     </AnchorPane>

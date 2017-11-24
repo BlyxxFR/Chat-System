@@ -15,10 +15,10 @@ import java.util.ResourceBundle;
 
 public abstract class App extends Application {
 
-    private Stage stage;
     private static App instance;
     private static ResourceBundle globalMessages;
     private static List<String> doNotResize = Arrays.asList("login");
+    private Stage stage;
     // Screen offsets
     private double x = 0;
     private double y = 0;
@@ -26,9 +26,10 @@ public abstract class App extends Application {
 
     public App() {
         Settings.init();
-        globalMessages = ResourceBundle.getBundle("GlobalMessagesBundle", Settings.getLocale());
+        globalMessages = CommonController.getGlobalMessagesBundle();
         instance = this;
     }
+
     public static App getInstance() {
         return instance;
     }
@@ -44,16 +45,18 @@ public abstract class App extends Application {
             stage.setHeight(height);
         }
         stage.setTitle(Settings.getAppName() + " - " + globalMessages.getString("titleWindow"));
-        if(!this.isMaximized) {
+        if (!this.isMaximized) {
             registerMouseEvents(root);
             if (!doNotResize.contains(resource))
                 ResizeHelper.addResizeListener(stage);
         }
+
+        assert scene != null;
         String css = this.getClass().getResource("/com/langram/utils/resources/scrollbar.css").toExternalForm();
         scene.getStylesheets().add(css);
     }
 
-    protected void start(Stage stage, String resource, int width, int height) throws Exception{
+    protected void start(Stage stage, String resource, int width, int height) throws Exception {
         // Init view
         Parent root = FXMLLoader.load(getClass().getResource("/com/langram/utils/resources/" + resource));
         // Making the app borderless
@@ -71,18 +74,18 @@ public abstract class App extends Application {
             y = event.getSceneY();
         });
         root.setOnMouseDragged(event -> {
-            if(y > 2 && y < 25 && x > 2 && x < stage.getWidth() - 2) {
+            if (y > 2 && y < 25 && x > 2 && x < stage.getWidth() - 2) {
                 stage.setX(event.getScreenX() - x);
                 stage.setY(event.getScreenY() - y);
             }
         });
     }
 
-    public boolean maximize() {
+    boolean maximize() {
         this.isMaximized = !this.isMaximized;
         stage.setMaximized(this.isMaximized);
         stage.setResizable(!this.isMaximized);
-        if(this.isMaximized) {
+        if (this.isMaximized) {
             Rectangle2D primaryScreenBounds = Screen.getPrimary().getVisualBounds();
             stage.setX(primaryScreenBounds.getMinX());
             stage.setY(primaryScreenBounds.getMinY());
