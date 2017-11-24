@@ -46,6 +46,8 @@ public abstract class App extends Application {
             ResizeHelper.addResizeListener(stage);
 
         }
+        String css = this.getClass().getResource("/com/langram/utils/resources/scrollbar.css").toExternalForm();
+        scene.getStylesheets().add(css);
         return root;
     }
 
