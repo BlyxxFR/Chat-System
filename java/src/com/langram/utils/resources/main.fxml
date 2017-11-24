@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="768.0" prefWidth="1024.0" style="-fx-background-color: #36393e;" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.langram.main.Controller">
+<AnchorPane minHeight="568.0" minWidth="1024.0" style="-fx-background-color: #36393e;" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.langram.main.Controller">
     <AnchorPane prefHeight="68.0" prefWidth="275.0" style="-fx-background-color: #2e3136;" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="25.0">
         <ImageView fx:id="profileImage" fitHeight="48.0" fitWidth="48.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="10.0">
             <Image url="@images/default-user.png" />
@@ -36,7 +36,7 @@
             <FontAwesomeIconView fx:id="closeButton" fill="#66686c" glyphName="CLOSE" onMouseClicked="#CloseApplication" size="16" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="5.0" />
         </AnchorPane>
     </Pane>
-    <AnchorPane layoutX="275.0" layoutY="26.0" prefHeight="742.0" prefWidth="752.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="275.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="26.0">
+    <AnchorPane layoutX="275.0" layoutY="26.0" prefWidth="752.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="275.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="26.0">
         <AnchorPane maxWidth="-Infinity" minHeight="-Infinity" prefHeight="68.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
             <Pane prefHeight="2.0" style="-fx-background-color: #2e3136;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
         </AnchorPane>
