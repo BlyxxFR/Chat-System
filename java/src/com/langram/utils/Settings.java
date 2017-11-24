@@ -24,7 +24,7 @@ public class Settings {
     public static int getDefaultWidth() { return 1024; }
 
     // @return int Application Height
-    public static int getDefaultHeight() { return 768; }
+    public static int getDefaultHeight() { return 568; }
 
     // @return int Application Login Width
     public static int getLoginWidth() { return 365; }
