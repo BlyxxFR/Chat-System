@@ -8,16 +8,24 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="projectsLabel" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.langram.main.Controller">
+<AnchorPane fx:id="projectsLabel" prefHeight="768.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.langram.main.Controller">
    <children>
-      <Pane prefHeight="26.0" prefWidth="1024.0" style="-fx-background-color: #2c3e50;">
+      <Pane fx:id="topPane" maxHeight="-Infinity" minHeight="-Infinity" nodeOrientation="RIGHT_TO_LEFT" prefHeight="26.0" style="-fx-background-color: #2c3e50;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <FontAwesomeIconView fill="WHITE" glyphName="CLOSE" layoutX="998.0" layoutY="18.0" onMouseClicked="#CloseApplication" size="16" />
-            <FontAwesomeIconView fill="WHITE" glyphName="GEAR" layoutX="971.0" layoutY="18.0" onMouseClicked="#OpenSettings" size="16" />
+            <AnchorPane>
+               <children>
+                  <FontAwesomeIconView fx:id="settingsButton" fill="WHITE" glyphName="GEAR" onMouseClicked="#OpenSettings" size="16" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="35.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="5.0" />
+               </children>
+            </AnchorPane>
+            <AnchorPane>
+               <children>
+                  <FontAwesomeIconView fx:id="closeButton" fill="WHITE" glyphName="CLOSE" onMouseClicked="#CloseApplication" size="16" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="5.0" />
+               </children>
+            </AnchorPane>
          </children></Pane>
-      <AnchorPane layoutY="26.0" prefHeight="744.0" prefWidth="275.0" style="-fx-background-color: #34495e;">
+      <AnchorPane fx:id="leftPane" layoutY="26.0" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="275.0" style="-fx-background-color: #34495e;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="26.0">
          <children>
-            <Label layoutX="26.0" layoutY="185.0" prefHeight="4.0" prefWidth="136.0" fx:id="projectsText" textFill="#95a5a6">
+            <Label fx:id="projectsText" layoutX="26.0" layoutY="185.0" prefHeight="4.0" prefWidth="136.0" textFill="#95a5a6">
                <font>
                   <Font name="Lato Regular" size="16.0" />
                </font>

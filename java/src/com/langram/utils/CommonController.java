@@ -13,6 +13,7 @@ public class CommonController implements javafx.fxml.Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         Settings.init();
         globalMessages = ResourceBundle.getBundle("GlobalMessagesBundle", Settings.getLocale());
+
     }
 
     public static ResourceBundle getGlobalMessagesBundle() {
