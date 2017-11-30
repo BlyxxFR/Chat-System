@@ -8,16 +8,14 @@ import java.util.ResourceBundle;
 
 public class CommonController implements javafx.fxml.Initializable {
 
-    protected static ResourceBundle globalMessages;
+    private static ResourceBundle globalMessages;
     public FontAwesomeIconView maximizeButton;
     public FontAwesomeIconView closeButton;
     public FontAwesomeIconView settingsButton;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        Settings.init();
-        globalMessages = ResourceBundle.getBundle("GlobalMessagesBundle", Settings.getLocale());
-
+        globalMessages = ResourceBundle.getBundle("GlobalMessagesBundle", Settings.getInstance().getLocale());
     }
 
     public static ResourceBundle getGlobalMessagesBundle() {

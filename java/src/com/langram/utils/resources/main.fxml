@@ -16,14 +16,26 @@
         <ImageView fx:id="profileImage" fitHeight="48.0" fitWidth="48.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="10.0">
             <Image url="@images/default-user.png" />
         </ImageView>
+      <Label fx:id="displayUsername" layoutX="93.0" layoutY="26.0" textFill="WHITE" AnchorPane.leftAnchor="90.0" AnchorPane.topAnchor="25.0">
+         <font>
+            <Font name="Lato Regular" size="16.0" />
+         </font>
+      </Label>
     </AnchorPane>
     <AnchorPane layoutY="100.0" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="275.0" style="-fx-background-color: #013243;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="93.0">
-        <Label fx:id="projectsText" prefHeight="4.0" prefWidth="136.0" textFill="#95a5a6" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="25.0">
+        <Label fx:id="projectsLabel" prefHeight="4.0" prefWidth="136.0" textFill="#95a5a6" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="25.0">
             <font>
                 <Font name="Lato Regular" size="16.0" />
             </font>
         </Label>
-      <FontAwesomeIconView fx:id="addProjectChannel" fill="#27ae60" glyphName="PLUS" layoutX="236.0" layoutY="40.0" onMouseClicked="#AddProjectChannel" size="16" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="25.0" />
+      <FontAwesomeIconView fx:id="addProjectChannelIcon" fill="#27ae60" glyphName="PLUS" layoutX="236.0" layoutY="40.0" onMouseClicked="#AddProjectChannel" size="16" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="25.0" />
+      <JFXListView fx:id="projectsList" layoutX="14.0" layoutY="56.0" style="-fx-background-color: transparent; -fx-text-fill: white;" AnchorPane.bottomAnchor="300.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="55.0" />
+      <Label fx:id="onlineLabel" layoutX="40.0" layoutY="418.0" textFill="#95a5a6" AnchorPane.bottomAnchor="250.0" AnchorPane.leftAnchor="25.0">
+         <font>
+            <Font name="Lato Regular" size="16.0" />
+         </font>
+      </Label>
+      <FontAwesomeIconView fill="#27ae60" glyphName="CIRCLE" layoutX="231.0" layoutY="420.0" size="12" AnchorPane.bottomAnchor="250.0" AnchorPane.rightAnchor="25.0" />
     </AnchorPane>
     <Pane maxHeight="-Infinity" minHeight="-Infinity" nodeOrientation="RIGHT_TO_LEFT" prefHeight="26.0" style="-fx-background-color: #00202b;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <AnchorPane>
@@ -39,6 +51,11 @@
     <AnchorPane layoutX="275.0" layoutY="26.0" prefHeight="742.0" prefWidth="752.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="275.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="26.0">
         <AnchorPane maxWidth="-Infinity" minHeight="-Infinity" prefHeight="68.0" style="-fx-background-color: white;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
             <Pane prefHeight="2.0" style="-fx-background-color: #f0f0f2;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
+         <Label fx:id="channelName" layoutX="26.0" layoutY="22.0" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="25.0">
+            <font>
+               <Font name="Lato Regular" size="18.0" />
+            </font>
+         </Label>
         </AnchorPane>
         <AnchorPane maxHeight="-Infinity" minHeight="-Infinity" prefHeight="150.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
             <AnchorPane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: white; -fx-border-color: #f0f0f2; -fx-background-radius: 5; -fx-border-radius: 5;" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
@@ -50,6 +67,6 @@
                 <FontAwesomeIconView fx:id="sendMessage" fill="#c3c4c8" glyphName="SEND" size="32" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="60.0" />
             </AnchorPane>
         </AnchorPane>
-      <JFXListView fx:id="messagesList" layoutX="392.0" layoutY="122.0" style="-fx-background-color: transparent;" AnchorPane.bottomAnchor="150.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="80.0" />
+      <JFXListView fx:id="messagesList" layoutX="392.0" layoutY="122.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" style="-fx-background-color: transparent;" AnchorPane.bottomAnchor="150.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="80.0" />
     </AnchorPane>
 </AnchorPane>

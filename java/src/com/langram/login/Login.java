@@ -14,11 +14,11 @@ public class Login extends App {
 
     public void start(Stage stage) throws Exception {
 
-        super.start(stage, "login.fxml", Settings.getLoginWidth(), Settings.getLoginHeight());
+        super.start(stage, "login.fxml", Settings.getInstance().getLoginWidth(), Settings.getInstance().getLoginHeight());
 
         // Get App name and title locale
-        ResourceBundle globalMessages = ResourceBundle.getBundle("GlobalMessagesBundle", Settings.getLocale());
-        stage.setTitle(Settings.getAppName() + " - " + globalMessages.getString("titleLoginWindow"));
+        ResourceBundle globalMessages = ResourceBundle.getBundle("GlobalMessagesBundle", Settings.getInstance().getLocale());
+        stage.setTitle(Settings.getInstance().getAppName() + " - " + globalMessages.getString("titleLoginWindow"));
 
         // Show the stage
         stage.show();

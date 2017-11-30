@@ -25,8 +25,7 @@ public abstract class App extends Application {
     private boolean isMaximized = false;
 
     public App() {
-        Settings.init();
-        globalMessages = ResourceBundle.getBundle("GlobalMessagesBundle", Settings.getLocale());
+        globalMessages = ResourceBundle.getBundle("GlobalMessagesBundle", Settings.getInstance().getLocale());
         instance = this;
     }
     public static App getInstance() {
@@ -43,7 +42,7 @@ public abstract class App extends Application {
             stage.setWidth(width);
             stage.setHeight(height);
         }
-        stage.setTitle(Settings.getAppName() + " - " + globalMessages.getString("titleWindow"));
+        stage.setTitle(Settings.getInstance().getAppName() + " - " + globalMessages.getString("titleWindow"));
         if(!this.isMaximized) {
             registerMouseEvents(root);
             if (!doNotResize.contains(resource))
@@ -51,10 +50,9 @@ public abstract class App extends Application {
         }
         // Set scrollbar css
         String css = this.getClass().getResource("/com/langram/utils/resources/scrollbar.css").toExternalForm();
+        assert scene != null;
         scene.getStylesheets().add(css);
-        // Set messages list css
-        css = this.getClass().getResource("/com/langram/utils/resources/messages.css").toExternalForm();
-        scene.getStylesheets().add(css);
+
     }
 
     protected void start(Stage stage, String resource, int width, int height) throws Exception{
@@ -82,7 +80,7 @@ public abstract class App extends Application {
         });
     }
 
-    public boolean maximize() {
+    boolean maximize() {
         this.isMaximized = !this.isMaximized;
         stage.setMaximized(this.isMaximized);
         stage.setResizable(!this.isMaximized);

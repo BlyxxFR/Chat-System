@@ -18,7 +18,7 @@ public class Controller extends CommonController implements javafx.fxml.Initiali
 
     public void initialize(URL location, ResourceBundle resources) {
         super.initialize(location, resources);
-        ResourceBundle loginMessages = ResourceBundle.getBundle("LoginMessagesBundle", Settings.getLocale());
+        ResourceBundle loginMessages = ResourceBundle.getBundle("LoginMessagesBundle", Settings.getInstance().getLocale());
         usernameText.setPromptText(loginMessages.getString("username"));
         passwordText.setPromptText(loginMessages.getString("password"));
         loginButton.setText(loginMessages.getString("login"));
@@ -27,6 +27,7 @@ public class Controller extends CommonController implements javafx.fxml.Initiali
 
 
     public void login() throws Exception {
-        Login.getInstance().replaceSceneContent("main.fxml", Settings.getDefaultWidth(), Settings.getDefaultHeight());
+        Settings.getInstance().setUsername(usernameText.getText());
+        Login.getInstance().replaceSceneContent("main.fxml", Settings.getInstance().getDefaultWidth(), Settings.getInstance().getDefaultHeight());
     }
 }

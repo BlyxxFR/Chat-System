@@ -90,7 +90,7 @@ class ResizeHelper {
             } else if (MouseEvent.MOUSE_DRAGGED.equals(mouseEventType)) {
                 if (!Cursor.DEFAULT.equals(cursorEvent)) {
                     if (!Cursor.W_RESIZE.equals(cursorEvent) && !Cursor.E_RESIZE.equals(cursorEvent)) {
-                        double minHeight = Settings.getDefaultHeight();
+                        double minHeight = Settings.getInstance().getDefaultHeight();
                         if (Cursor.NW_RESIZE.equals(cursorEvent) || Cursor.N_RESIZE.equals(cursorEvent) || Cursor.NE_RESIZE.equals(cursorEvent)) {
                             if (stage.getHeight() > minHeight || mouseEventY < 0) {
                                 stage.setHeight(stage.getY() - mouseEvent.getScreenY() + stage.getHeight());
@@ -104,7 +104,7 @@ class ResizeHelper {
                     }
 
                     if (!Cursor.N_RESIZE.equals(cursorEvent) && !Cursor.S_RESIZE.equals(cursorEvent)) {
-                        double minWidth = Settings.getDefaultWidth();
+                        double minWidth = Settings.getInstance().getDefaultWidth();
                         if (Cursor.NW_RESIZE.equals(cursorEvent) || Cursor.W_RESIZE.equals(cursorEvent) || Cursor.SW_RESIZE.equals(cursorEvent)) {
                             if (stage.getWidth() > minWidth || mouseEventX < 0) {
                                 stage.setWidth(stage.getX() - mouseEvent.getScreenX() + stage.getWidth());

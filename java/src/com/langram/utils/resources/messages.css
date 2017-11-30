@@ -3,28 +3,27 @@
 }
 
 .list-view .list-cell:hover {
-    -fx-background-color: #434343;
+    -fx-background-color: #bdc3c7;
 }
 
 .list-view .list-cell:selected {
-    -fx-background-color: #434343;
+    -fx-background-color: #bdc3c7;
 }
 
 .list-cell:empty {
-    -fx-padding: 2px ;
-    -fx-background-color: transparent ;
-    -fx-background-insets: 0 ;
+    -fx-opacity: 0;
 }
 
 .list-view .list-cell {
     -fx-background-color: transparent, -fx-background ;
     -fx-text-fill: #66686c;
-    -fx-padding: 25 15 25 15 ;
-    -fx-background-insets: 0px, 2px ;
+    -fx-padding: 25 ;
+    -fx-font-size: 16px;
+    -fx-background-insets: 0px, 10px ;
 }
 
 .list-view .label {
-    -fx-text-fill: white;
+    -fx-text-fill: #66686c;
 }
 
 .jfx-rippler {
