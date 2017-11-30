@@ -7,8 +7,6 @@ import com.langram.utils.messages.Message;
 import com.langram.utils.messages.MessageDisplay;
 import com.langram.utils.Settings;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
-import javafx.beans.binding.Bindings;
-import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
