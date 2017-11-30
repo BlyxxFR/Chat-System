@@ -28,10 +28,10 @@
             <FontAwesomeIconView fx:id="settingsButton" fill="#66686c" glyphName="GEAR" onMouseClicked="#OpenSettings" size="16" AnchorPane.leftAnchor="60.0" AnchorPane.topAnchor="5.0" />
         </AnchorPane>
         <AnchorPane>
-            <FontAwesomeIconView fx:id="closeButton" fill="#66686c" glyphName="CLOSE" onMouseClicked="#CloseApplication" size="16" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="5.0" />
+            <FontAwesomeIconView fx:id="maximizeButton" fill="#66686c" glyphName="WINDOW_MAXIMIZE" onMouseClicked="#MaximizeApplication" size="14" AnchorPane.leftAnchor="35.0" AnchorPane.topAnchor="6.0" />
         </AnchorPane>
         <AnchorPane>
-            <FontAwesomeIconView fx:id="maximizeButton" fill="#66686c" glyphName="WINDOW_MAXIMIZE" onMouseClicked="#MaximizeApplication" size="14" AnchorPane.leftAnchor="35.0" AnchorPane.topAnchor="6.0" />
+            <FontAwesomeIconView fx:id="closeButton" fill="#66686c" glyphName="CLOSE" onMouseClicked="#CloseApplication" size="16" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="5.0" />
         </AnchorPane>
     </Pane>
     <AnchorPane layoutX="275.0" layoutY="26.0" prefHeight="742.0" prefWidth="752.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="275.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="26.0">
