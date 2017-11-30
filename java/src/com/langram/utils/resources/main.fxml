@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?scenebuilder-stylesheet scrollbar.css?>
-
+<?import com.jfoenix.controls.JFXListView?>
 <?import com.jfoenix.controls.JFXTextArea?>
-<?import de.jensd.fx.glyphs.fontawesome.*?>
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
+
 <AnchorPane prefHeight="768.0" prefWidth="1024.0" style="-fx-background-color: #EEEEEE;" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.langram.main.Controller">
     <AnchorPane prefHeight="68.0" prefWidth="275.0" style="-fx-background-color: #013243;" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="25.0">
         <ImageView fx:id="profileImage" fitHeight="48.0" fitWidth="48.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="10.0">
@@ -21,7 +23,7 @@
                 <Font name="Lato Regular" size="16.0" />
             </font>
         </Label>
-      <FontAwesomeIconView fx:id="addProjectChannel" fill="#27ae60" glyphName="PLUS" layoutX="236.0" layoutY="40.0" size="16" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="25.0" />
+      <FontAwesomeIconView fx:id="addProjectChannel" fill="#27ae60" glyphName="PLUS" layoutX="236.0" layoutY="40.0" onMouseClicked="#AddProjectChannel" size="16" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="25.0" />
     </AnchorPane>
     <Pane maxHeight="-Infinity" minHeight="-Infinity" nodeOrientation="RIGHT_TO_LEFT" prefHeight="26.0" style="-fx-background-color: #00202b;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <AnchorPane>
@@ -48,5 +50,6 @@
                 <FontAwesomeIconView fx:id="sendMessage" fill="#c3c4c8" glyphName="SEND" size="32" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="60.0" />
             </AnchorPane>
         </AnchorPane>
+      <JFXListView fx:id="messagesList" layoutX="392.0" layoutY="122.0" style="-fx-background-color: transparent;" AnchorPane.bottomAnchor="150.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="80.0" />
     </AnchorPane>
 </AnchorPane>

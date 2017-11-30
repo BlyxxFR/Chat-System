@@ -49,7 +49,11 @@ public abstract class App extends Application {
             if (!doNotResize.contains(resource))
                 ResizeHelper.addResizeListener(stage);
         }
+        // Set scrollbar css
         String css = this.getClass().getResource("/com/langram/utils/resources/scrollbar.css").toExternalForm();
+        scene.getStylesheets().add(css);
+        // Set messages list css
+        css = this.getClass().getResource("/com/langram/utils/resources/messages.css").toExternalForm();
         scene.getStylesheets().add(css);
     }
 
