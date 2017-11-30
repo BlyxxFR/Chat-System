@@ -2,8 +2,10 @@ package com.langram.utils;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
@@ -20,6 +22,7 @@ public abstract class App extends Application {
     // Screen offsets
     private double x = 0;
     private double y = 0;
+    private boolean isMaximized = false;
 
     public App() {
         Settings.init();
@@ -41,13 +44,11 @@ public abstract class App extends Application {
             stage.setHeight(height);
         }
         stage.setTitle(Settings.getAppName() + " - " + globalMessages.getString("titleWindow"));
-        registerMouseEvents(root);
-        if(!doNotResize.contains(resource)) {
-            ResizeHelper.addResizeListener(stage);
-
+        if(!this.isMaximized) {
+            registerMouseEvents(root);
+            if (!doNotResize.contains(resource))
+                ResizeHelper.addResizeListener(stage);
         }
-        // Custom scroll bar CSS
-        assert scene != null;
         String css = this.getClass().getResource("/com/langram/utils/resources/scrollbar.css").toExternalForm();
         scene.getStylesheets().add(css);
     }
@@ -75,5 +76,19 @@ public abstract class App extends Application {
                 stage.setY(event.getScreenY() - y);
             }
         });
+    }
+
+    public boolean maximize() {
+        this.isMaximized = !this.isMaximized;
+        stage.setMaximized(this.isMaximized);
+        stage.setResizable(!this.isMaximized);
+        if(this.isMaximized) {
+            Rectangle2D primaryScreenBounds = Screen.getPrimary().getVisualBounds();
+            stage.setX(primaryScreenBounds.getMinX());
+            stage.setY(primaryScreenBounds.getMinY());
+            stage.setWidth(primaryScreenBounds.getWidth());
+            stage.setHeight(primaryScreenBounds.getHeight());
+        }
+        return this.isMaximized;
     }
 }
