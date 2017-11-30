@@ -30,7 +30,7 @@ public abstract class App extends Application {
         return instance;
     }
 
-    public Parent replaceSceneContent(String resource, int width, int height) throws Exception {
+    public void replaceSceneContent(String resource, int width, int height) throws Exception {
         Parent root = FXMLLoader.load(getClass().getResource("/com/langram/utils/resources/" + resource));
         Scene scene = stage.getScene();
         if (scene == null) {
@@ -46,12 +46,13 @@ public abstract class App extends Application {
             ResizeHelper.addResizeListener(stage);
 
         }
+        // Custom scroll bar CSS
+        assert scene != null;
         String css = this.getClass().getResource("/com/langram/utils/resources/scrollbar.css").toExternalForm();
         scene.getStylesheets().add(css);
-        return root;
     }
 
-    public void start(Stage stage, String resource, int width, int height) throws Exception{
+    protected void start(Stage stage, String resource, int width, int height) throws Exception{
         // Init view
         Parent root = FXMLLoader.load(getClass().getResource("/com/langram/utils/resources/" + resource));
         // Making the app borderless

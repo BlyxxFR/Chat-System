@@ -1,7 +1,5 @@
 package com.langram.utils;
 
-import javafx.scene.input.MouseEvent;
-
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -20,11 +18,12 @@ public class CommonController implements javafx.fxml.Initializable {
         return globalMessages;
     }
 
-    public void CloseApplication(MouseEvent mouseEvent) {
+    public void CloseApplication() {
         System.exit(0);
     }
 
-    public void OpenSettings(MouseEvent mouseEvent) {}
+    public void OpenSettings() {}
 
+    public void AddProjectChannel() {}
 
 }
