@@ -30,10 +30,10 @@ public class RSAModule {
 
     public RSAModule() {
         try {
-            if(Files.notExists(Paths.get(path))) {
+            if (Files.notExists(Paths.get(path))) {
                 Files.createDirectory(Paths.get(path));
                 Files.createDirectory(Paths.get(signPath));
-                (new File(dataFile)).createNewFile();
+                boolean newFile = (new File(dataFile)).createNewFile();
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -62,7 +62,9 @@ public class RSAModule {
             out = new FileOutputStream(keyFile + ".pub");
             out.write(encoder.encodeToString(pub.getEncoded()).getBytes(Charset.forName("UTF-8")));
             out.close();
-        } catch (Exception e) { System.out.println(e); }
+        } catch (Exception e) {
+            System.out.println(e);
+        }
 
     }
 
@@ -77,7 +79,10 @@ public class RSAModule {
         } catch (IOException e) {
             this.generateKeys();
             return this.getPrivateKey();
-        } catch (NoSuchAlgorithmException | InvalidKeySpecException e) { System.out.println(e); return null; }
+        } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
+            System.out.println(e);
+            return null;
+        }
 
     }
 
@@ -92,14 +97,17 @@ public class RSAModule {
         } catch (IOException e) {
             this.generateKeys();
             return this.getPublicKey();
-        } catch (NoSuchAlgorithmException | InvalidKeySpecException e) { System.out.println(e); return null; }
+        } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
+            System.out.println(e);
+            return null;
+        }
 
     }
 
     public void generateDigitalSignature() {
         try {
             String signFile = signPath + Hash(this.getPublicKey().toString());
-            if(Files.notExists(Paths.get(signFile))) {
+            if (Files.notExists(Paths.get(signFile))) {
                 Signature sign = Signature.getInstance("SHA256withRSA");
                 sign.initSign(this.getPrivateKey());
 
@@ -124,7 +132,9 @@ public class RSAModule {
                     if (out != null) out.close();
                 }
             }
-        } catch (NoSuchAlgorithmException | IOException | SignatureException | InvalidKeyException e) { e.printStackTrace();}
+        } catch (NoSuchAlgorithmException | IOException | SignatureException | InvalidKeyException e) {
+            e.printStackTrace();
+        }
 
     }
 
@@ -149,31 +159,34 @@ public class RSAModule {
 
             String signName = Hash(pub.toString());
             Path path = Paths.get(signPath + signName);
-            if(Files.notExists(path))
+            if (Files.notExists(path))
                 throw (new MissingDigitalSignature());
             byte[] bytes = Files.readAllBytes(path);
             return sign.verify(bytes);
 
-        } catch (IOException | NoSuchAlgorithmException | InvalidKeyException | SignatureException e) { System.out.println(e); return false; }
+        } catch (IOException | NoSuchAlgorithmException | InvalidKeyException | SignatureException e) {
+            System.out.println(e);
+            return false;
+        }
 
     }
 
-    public String Hash(String input) throws NoSuchAlgorithmException, UnsupportedEncodingException
-    {
+    private String Hash(String input) throws NoSuchAlgorithmException, UnsupportedEncodingException {
         MessageDigest md = MessageDigest.getInstance("SHA-256");
         md.reset();
         byte[] buffer = input.getBytes("UTF-8");
         md.update(buffer);
         byte[] digest = md.digest();
 
-        String hexStr = "";
-        for (int i = 0; i < digest.length; i++) {
-            hexStr +=  Integer.toString( ( digest[i] & 0xff ) + 0x100, 16).substring( 1 );
+        StringBuilder hexStr = new StringBuilder();
+        for (byte aDigest : digest) {
+            hexStr.append(Integer.toString((aDigest & 0xff) + 0x100, 16).substring(1));
         }
-        return hexStr;
+        return hexStr.toString();
     }
 
-    private class MissingDigitalSignature extends Exception { }
+    private class MissingDigitalSignature extends Exception {
+    }
 
 }
 

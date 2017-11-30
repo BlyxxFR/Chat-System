@@ -24,7 +24,7 @@ public class Controller extends CommonController implements javafx.fxml.Initiali
     }
 
 
-    public void login(ActionEvent actionEvent) throws Exception {
+    public void login() throws Exception {
         Login.getInstance().replaceSceneContent("main.fxml", Settings.getDefaultWidth(), Settings.getDefaultHeight());
     }
 }

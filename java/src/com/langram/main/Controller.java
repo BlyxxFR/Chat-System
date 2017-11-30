@@ -18,6 +18,7 @@ public class Controller extends CommonController implements javafx.fxml.Initiali
     public FontAwesomeIconView sendMessage;
     public ImageView profileImage;
 
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         super.initialize(location, resources);
