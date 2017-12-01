@@ -37,33 +37,22 @@ public class MessageSenderService
     }
 
     private void sendMulticastMessageOn(String ipAddress, int port, Message message) throws IOException {
-
         UDPMulticastSocket socket = null;
-
         try
         {
             socket = new UDPMulticastSocket(4711);
             socket.setTimeout(1000);
-            System.out.println("Socket created...");
-
             socket.join(ipAddress);
             InetAddress srvrAddress = InetAddress.getByName(ipAddress);
-
             socket.send(message, srvrAddress, port);
-
             socket.leave(ipAddress);
         }
         catch(Exception e)
         {
             e.printStackTrace();
         }
-
         if (socket != null)
-        {
             socket.close();
-            System.out.println("Shutting down...");
-        }
-
     }
 
 }

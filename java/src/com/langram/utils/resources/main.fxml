@@ -34,7 +34,7 @@
             </font>
         </Label>
       <FontAwesomeIconView fx:id="addProjectChannelIcon" fill="#27ae60" glyphName="PLUS" layoutX="236.0" layoutY="40.0" onMouseClicked="#addProjectChannel" size="16" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="25.0" />
-      <JFXListView fx:id="projectsList" layoutX="14.0" layoutY="56.0" style="-fx-background-color: transparent; -fx-text-fill: white;" AnchorPane.bottomAnchor="300.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="55.0" />
+      <JFXListView fx:id="projectsList" layoutX="14.0" layoutY="56.0" onMouseClicked="#goToChannel" style="-fx-background-color: transparent; -fx-text-fill: white;" AnchorPane.bottomAnchor="300.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="55.0" />
       <Label fx:id="onlineLabel" layoutX="40.0" layoutY="418.0" textFill="#95a5a6" AnchorPane.bottomAnchor="250.0" AnchorPane.leftAnchor="25.0">
          <font>
             <Font name="Lato Regular" size="16.0" />
@@ -63,7 +63,7 @@
          </Label>
         </AnchorPane>
         <AnchorPane maxHeight="-Infinity" minHeight="-Infinity" prefHeight="150.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
-            <AnchorPane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: white; -fx-border-color: #f0f0f2; -fx-background-radius: 5; -fx-border-radius: 5;" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
+            <AnchorPane fx:id="sendingArea" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: white; -fx-border-color: #f0f0f2; -fx-background-radius: 5; -fx-border-radius: 5;" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
                 <JFXTextArea fx:id="textMessage" style="-fx-background-color: white; -fx-text-fill: #66686c;" unFocusColor="#f0f0f2" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="52.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
                <font>
                   <Font name="Lato Regular" size="15.0" />
