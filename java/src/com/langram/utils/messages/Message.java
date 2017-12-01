@@ -1,25 +1,35 @@
 package com.langram.utils.messages;
 
-public class Message {
+import java.io.Serializable;
+import java.util.Date;
 
-    private String senderName;
-    private String date;
-    private String text;
+public abstract class Message implements Serializable
+{
+    public enum MessageType {
+        TEXT_MESSAGE,
+        FILE_MESSAGE
+    }
 
-    public Message(String senderName, String date, String text) {
-        this.text = text;
-        this.date = date;
-        this.senderName = senderName;
+    protected Date date;
+    protected MessageType messageType;
+    protected String senderName;
+
+    public Message(MessageType t)
+    {
+        this.date = new Date();
+        this.messageType = t;
+    }
+
+    public String toString()
+    {
+        String type = this.messageType == MessageType.TEXT_MESSAGE ? "TEXT" : "FILE";
+        return "["+this.date+"] : Un message de type " + type + " a été reçu !";
     }
 
     String getDate() {
-        return date;
+        return date.toString();
     }
-
-    String getText() {
-        return text;
-    }
-
     String getSenderName() { return senderName; }
 
+    String getText() { return ""; }
 }

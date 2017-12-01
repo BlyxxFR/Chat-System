@@ -1,22 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?scenebuilder-stylesheet scrollbar.css?>
+
 <?import com.jfoenix.controls.JFXListView?>
 <?import com.jfoenix.controls.JFXTextArea?>
-<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
-<?import javafx.scene.control.Label?>
+<?import de.jensd.fx.glyphs.fontawesome.*?>
+<?import javafx.scene.control.*?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.Pane?>
-<?import javafx.scene.text.Font?>
-
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 <AnchorPane prefHeight="768.0" prefWidth="1024.0" style="-fx-background-color: #EEEEEE;" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.langram.main.Controller">
     <AnchorPane prefHeight="68.0" prefWidth="275.0" style="-fx-background-color: #013243;" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="25.0">
-        <ImageView fx:id="profileImage" fitHeight="48.0" fitWidth="48.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="10.0">
+        <ImageView fx:id="profileImage" fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="10.0">
             <Image url="@images/default-user.png" />
         </ImageView>
-      <Label fx:id="displayUsername" layoutX="93.0" layoutY="26.0" textFill="WHITE" AnchorPane.leftAnchor="90.0" AnchorPane.topAnchor="25.0">
+      <Label fx:id="displayUsername" layoutX="93.0" layoutY="26.0" textFill="WHITE" AnchorPane.leftAnchor="60.0" AnchorPane.topAnchor="10.0">
+         <font>
+            <Font name="Lato Regular" size="16.0" />
+         </font>
+      </Label>
+      <FontAwesomeIconView fx:id="privateMessagesEnvelope" fill="WHITE" glyphName="ENVELOPE_ALT" layoutX="16.0" layoutY="58.85714340209961" onMouseClicked="#goToPrivateMessages" size="18" AnchorPane.leftAnchor="28.0" AnchorPane.topAnchor="43.0" />
+      <Label fx:id="privateMessageLabel" layoutX="60.0" layoutY="41.0" onMouseClicked="#goToPrivateMessages" textFill="WHITE" AnchorPane.leftAnchor="60.0" AnchorPane.topAnchor="42.0">
          <font>
             <Font name="Lato Regular" size="16.0" />
          </font>

@@ -3,9 +3,10 @@ package com.langram.main;
 import com.jfoenix.controls.JFXListView;
 import com.jfoenix.controls.JFXTextArea;
 import com.langram.utils.CommonController;
+import com.langram.utils.Settings;
 import com.langram.utils.messages.Message;
 import com.langram.utils.messages.MessageDisplay;
-import com.langram.utils.Settings;
+import com.langram.utils.messages.TextMessage;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
@@ -28,6 +29,8 @@ public class Controller extends CommonController implements javafx.fxml.Initiali
     public Label onlineLabel;
     public Label channelName;
     public FontAwesomeIconView addProjectChannelIcon;
+    public Label privateMessageLabel;
+    public FontAwesomeIconView privateMessagesEnvelope;
     private int i = 0;
 
     @Override
@@ -39,6 +42,11 @@ public class Controller extends CommonController implements javafx.fxml.Initiali
         projectsLabel.setText(mainMessages.getString("projects"));
         onlineLabel.setText(mainMessages.getString("online"));
         displayUsername.setText(Settings.getInstance().getUsername());
+
+        // Set private message label
+        int privateMessageCounter = 3;
+        privateMessageLabel.setText(String.format(mainMessages.getString(privateMessageCounter > 1 ? "new_message_plural" : "new_message"), privateMessageCounter));
+        privateMessagesEnvelope.setGlyphName(privateMessageCounter > 0 ? "ENVELOPE_ALT" : "ENVELOPE_OPEN_ALT");
 
         // Set messages' list css
         String css = this.getClass().getResource("/com/langram/utils/resources/messages.css").toExternalForm();
@@ -64,7 +72,7 @@ public class Controller extends CommonController implements javafx.fxml.Initiali
     public void onReceivedMessage() {
         String c = "test " + i;
         Date date = new Date();
-        Message message = new Message("Sender Name", date.toString(), c);
+        Message message = new TextMessage("Sender Name", c);
 
         messagesList.getItems().add(message);
         messagesList.scrollTo(message);
@@ -72,9 +80,13 @@ public class Controller extends CommonController implements javafx.fxml.Initiali
         i++;
     }
 
-    @Override
+    public void onReceivedPrivateMessage() {
+
+    }
     public void AddProjectChannel(MouseEvent mouseEvent) {
         this.onReceivedMessage();
     }
 
+    public void goToPrivateMessages(MouseEvent mouseEvent) {
+    }
 }

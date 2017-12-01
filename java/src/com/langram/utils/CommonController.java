@@ -33,7 +33,4 @@ public class CommonController implements javafx.fxml.Initializable {
 
     public void OpenSettings(MouseEvent mouseEvent) {}
 
-
-    public void AddProjectChannel(MouseEvent mouseEvent) {}
-
 }
