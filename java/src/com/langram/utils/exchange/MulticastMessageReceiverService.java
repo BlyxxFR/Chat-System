@@ -6,7 +6,7 @@ import java.io.IOException;
 
 public class MulticastMessageReceiverService implements MessageReceiver {
 
-    public static final int BUFFER_SIZE = 1024;
+    private static final int BUFFER_SIZE = 1024;
 
     public void listenOnPort(String ipAddress, int port, IncomingMessageListener messageListener) throws IOException {
 
@@ -15,9 +15,7 @@ public class MulticastMessageReceiverService implements MessageReceiver {
         try
         {
             socket = new UDPMulticastSocket(port);
-
             socket.join(ipAddress);
-
             while(true)
             {
                 socket.receive(BUFFER_SIZE, messageListener);

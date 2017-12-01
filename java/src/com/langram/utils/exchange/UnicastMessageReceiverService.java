@@ -6,23 +6,18 @@ import java.io.IOException;
 
 public class UnicastMessageReceiverService implements MessageReceiver {
 
-    public static final int BUFFER_SIZE = 1024;
+    private static final int BUFFER_SIZE = 1024;
 
     public void listenOnPort(String ipAddress, int port, IncomingMessageListener messageListener) throws IOException {
         UDPSocket socket = null;
-
         try {
             socket = new UDPSocket(port);
-            System.out.println("Socket created...");
-
             while (true) {
                 socket.receive(BUFFER_SIZE, messageListener);
             }
-
         } catch (Exception e) {
             e.printStackTrace();
         }
-
         if (socket != null)
             socket.close();
     }

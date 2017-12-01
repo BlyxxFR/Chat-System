@@ -4,19 +4,23 @@ import com.jfoenix.controls.JFXListView;
 import com.jfoenix.controls.JFXTextArea;
 import com.langram.utils.CommonController;
 import com.langram.utils.Settings;
+import com.langram.utils.exchange.IncomingMessageListener;
+import com.langram.utils.exchange.MessageReceiverThread;
 import com.langram.utils.exchange.MessageSenderService;
 import com.langram.utils.exchange.exception.UnsupportedSendingModeException;
 import com.langram.utils.messages.Message;
 import com.langram.utils.messages.MessageDisplay;
 import com.langram.utils.messages.TextMessage;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
+import javafx.application.Platform;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+
+import static com.langram.utils.exchange.MessageSenderService.SendingMode.MULTICAST;
 
 public class Controller extends CommonController implements javafx.fxml.Initializable {
 
@@ -69,24 +73,38 @@ public class Controller extends CommonController implements javafx.fxml.Initiali
         textMessage.setPromptText(String.format(mainMessages.getString("prompt"), currentChannel));
 
         // Start thread listener
-
+        MessageReceiverThread listenerThread = new MessageReceiverThread(MULTICAST, "239.0.0.1", 4488, new onReceivedMessage());
+        listenerThread.start();
     }
 
-    public void onReceivedMessage(Message message) {
-        messagesList.getItems().add(message);
-        messagesList.scrollTo(message);
+    public class onReceivedMessage implements IncomingMessageListener {
+        public void onNewIncomingMessage(final Message message) {
+            Platform.runLater(
+                    () -> {
+                        messagesList.getItems().add(message);
+                        messagesList.scrollTo(message);
+                    }
+            );
+        }
     }
 
-    public void onReceivedPrivateMessage() {
+    public class onReceivedPrivateMessage implements IncomingMessageListener {
+        public void onNewIncomingMessage(final Message message) {
+            Platform.runLater(
+                    () -> {
 
-    }
-    public void AddProjectChannel(MouseEvent mouseEvent) {
-    }
-
-    public void goToPrivateMessages(MouseEvent mouseEvent) {
+                    }
+            );
+        }
     }
 
-    public void sendMessage(MouseEvent mouseEvent) {
+    public void addProjectChannel() {
+    }
+
+    public void goToPrivateMessages() {
+    }
+
+    public void sendMessage() {
         Message message = new TextMessage(Settings.getInstance().getUsername(), textMessage.getText());
         MessageSenderService messageSender = new MessageSenderService();
         try {
@@ -96,5 +114,7 @@ public class Controller extends CommonController implements javafx.fxml.Initiali
         } catch (IOException e) {
             e.printStackTrace();
         }
+        textMessage.setText("");
     }
 }
+

@@ -33,7 +33,7 @@
                 <Font name="Lato Regular" size="16.0" />
             </font>
         </Label>
-      <FontAwesomeIconView fx:id="addProjectChannelIcon" fill="#27ae60" glyphName="PLUS" layoutX="236.0" layoutY="40.0" onMouseClicked="#AddProjectChannel" size="16" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="25.0" />
+      <FontAwesomeIconView fx:id="addProjectChannelIcon" fill="#27ae60" glyphName="PLUS" layoutX="236.0" layoutY="40.0" onMouseClicked="#addProjectChannel" size="16" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="25.0" />
       <JFXListView fx:id="projectsList" layoutX="14.0" layoutY="56.0" style="-fx-background-color: transparent; -fx-text-fill: white;" AnchorPane.bottomAnchor="300.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="55.0" />
       <Label fx:id="onlineLabel" layoutX="40.0" layoutY="418.0" textFill="#95a5a6" AnchorPane.bottomAnchor="250.0" AnchorPane.leftAnchor="25.0">
          <font>
@@ -44,13 +44,13 @@
     </AnchorPane>
     <Pane maxHeight="-Infinity" minHeight="-Infinity" nodeOrientation="RIGHT_TO_LEFT" prefHeight="26.0" style="-fx-background-color: #00202b;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <AnchorPane>
-            <FontAwesomeIconView fx:id="settingsButton" fill="#66686c" glyphName="GEAR" onMouseClicked="#OpenSettings" size="16" AnchorPane.leftAnchor="60.0" AnchorPane.topAnchor="5.0" />
+            <FontAwesomeIconView fx:id="settingsButton" fill="#66686c" glyphName="GEAR" onMouseClicked="#openSettings" size="16" AnchorPane.leftAnchor="60.0" AnchorPane.topAnchor="5.0" />
         </AnchorPane>
         <AnchorPane>
-            <FontAwesomeIconView fx:id="maximizeButton" fill="#66686c" glyphName="WINDOW_MAXIMIZE" onMouseClicked="#MaximizeApplication" size="14" AnchorPane.leftAnchor="35.0" AnchorPane.topAnchor="6.0" />
+            <FontAwesomeIconView fx:id="maximizeButton" fill="#66686c" glyphName="WINDOW_MAXIMIZE" onMouseClicked="#maximizeApplication" size="14" AnchorPane.leftAnchor="35.0" AnchorPane.topAnchor="6.0" />
         </AnchorPane>
         <AnchorPane>
-            <FontAwesomeIconView fx:id="closeButton" fill="#66686c" glyphName="CLOSE" onMouseClicked="#CloseApplication" size="16" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="5.0" />
+            <FontAwesomeIconView fx:id="closeButton" fill="#66686c" glyphName="CLOSE" onMouseClicked="#closeApplication" size="16" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="5.0" />
         </AnchorPane>
     </Pane>
     <AnchorPane layoutX="275.0" layoutY="26.0" prefHeight="742.0" prefWidth="752.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="275.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="26.0">
@@ -72,6 +72,6 @@
                 <FontAwesomeIconView fx:id="sendMessage" fill="#c3c4c8" glyphName="SEND" onMouseClicked="#sendMessage" size="32" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="60.0" />
             </AnchorPane>
         </AnchorPane>
-      <JFXListView fx:id="messagesList" layoutX="392.0" layoutY="122.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" style="-fx-background-color: transparent;" AnchorPane.bottomAnchor="150.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="80.0" />
+      <JFXListView fx:id="messagesList" layoutX="392.0" layoutY="122.0" style="-fx-background-color: transparent;" AnchorPane.bottomAnchor="150.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="80.0" />
     </AnchorPane>
 </AnchorPane>
