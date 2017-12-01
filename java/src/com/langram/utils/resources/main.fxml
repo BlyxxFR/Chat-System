@@ -69,7 +69,7 @@
                   <Font name="Lato Regular" size="15.0" />
                </font></JFXTextArea>
                 <FontAwesomeIconView fx:id="sendFile" fill="#c3c4c8" glyphName="UPLOAD" size="32" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="10.0" />
-                <FontAwesomeIconView fx:id="sendMessage" fill="#c3c4c8" glyphName="SEND" size="32" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="60.0" />
+                <FontAwesomeIconView fx:id="sendMessage" fill="#c3c4c8" glyphName="SEND" onMouseClicked="#sendMessage" size="32" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="60.0" />
             </AnchorPane>
         </AnchorPane>
       <JFXListView fx:id="messagesList" layoutX="392.0" layoutY="122.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" style="-fx-background-color: transparent;" AnchorPane.bottomAnchor="150.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="80.0" />

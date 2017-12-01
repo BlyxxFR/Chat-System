@@ -4,6 +4,8 @@ import com.jfoenix.controls.JFXListView;
 import com.jfoenix.controls.JFXTextArea;
 import com.langram.utils.CommonController;
 import com.langram.utils.Settings;
+import com.langram.utils.exchange.MessageSenderService;
+import com.langram.utils.exchange.exception.UnsupportedSendingModeException;
 import com.langram.utils.messages.Message;
 import com.langram.utils.messages.MessageDisplay;
 import com.langram.utils.messages.TextMessage;
@@ -12,8 +14,8 @@ import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 
+import java.io.IOException;
 import java.net.URL;
-import java.util.Date;
 import java.util.ResourceBundle;
 
 public class Controller extends CommonController implements javafx.fxml.Initializable {
@@ -31,7 +33,6 @@ public class Controller extends CommonController implements javafx.fxml.Initiali
     public FontAwesomeIconView addProjectChannelIcon;
     public Label privateMessageLabel;
     public FontAwesomeIconView privateMessagesEnvelope;
-    private int i = 0;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -67,26 +68,33 @@ public class Controller extends CommonController implements javafx.fxml.Initiali
         // Set prompt message
         textMessage.setPromptText(String.format(mainMessages.getString("prompt"), currentChannel));
 
+        // Start thread listener
+
     }
 
-    public void onReceivedMessage() {
-        String c = "test " + i;
-        Date date = new Date();
-        Message message = new TextMessage("Sender Name", c);
-
+    public void onReceivedMessage(Message message) {
         messagesList.getItems().add(message);
         messagesList.scrollTo(message);
-
-        i++;
     }
 
     public void onReceivedPrivateMessage() {
 
     }
     public void AddProjectChannel(MouseEvent mouseEvent) {
-        this.onReceivedMessage();
     }
 
     public void goToPrivateMessages(MouseEvent mouseEvent) {
+    }
+
+    public void sendMessage(MouseEvent mouseEvent) {
+        Message message = new TextMessage(Settings.getInstance().getUsername(), textMessage.getText());
+        MessageSenderService messageSender = new MessageSenderService();
+        try {
+            messageSender.sendMessageOn("239.0.0.1", 4488, MessageSenderService.SendingMode.MULTICAST, message);
+        } catch (UnsupportedSendingModeException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
