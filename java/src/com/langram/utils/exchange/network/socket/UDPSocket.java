@@ -66,7 +66,7 @@ public class UDPSocket
             inPacket.setLength(data.length);
             b_in.reset();
 
-            messageListener.onNewIncomingMessage(message, senderAddress, senderPort);
+            messageListener.onNewIncomingMessage(message, senderAddress.toString().substring(1), senderPort);
         } catch (ClassNotFoundException e2) {
             e2.printStackTrace();
         }

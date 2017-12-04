@@ -68,7 +68,7 @@ public class MessageSenderService {
     private ArrayList<ControlMessage> getReplies() throws IOException {
         ArrayList<ControlMessage> repliesList = new ArrayList<>();
         UDPSocket socket = new UDPSocket(CONTROL_PORT_LISTENER);
-        socket.setTimeout(1000);
+        socket.setTimeout(100);
 
         int MAX_CONSECUTIVE_TIMEOUT_ALLOWED = 3;
         int currentConsecutiveTimeout = 0;
@@ -90,7 +90,7 @@ public class MessageSenderService {
         onReceivedReply(ArrayList<ControlMessage> repliesList) {
             this.repliesList = repliesList;
         }
-        public void onNewIncomingMessage(Message message, InetAddress senderAddress, int senderPort) {
+        public void onNewIncomingMessage(Message message, String senderAddress, int senderPort) {
             ControlMessage controlMessage = (ControlMessage) message;
             this.repliesList.add(controlMessage);
         }

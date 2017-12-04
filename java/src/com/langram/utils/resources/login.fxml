@@ -7,7 +7,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="365.0" style="-fx-background-color: EEEEEE;" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.langram.login.Controller">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="365.0" style="-fx-background-color: EEEEEE;" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.langram.login.LoginController">
     <Pane prefHeight="80.0" prefWidth="365.0" style="-fx-background-color: #013243;">
         <FontAwesomeIconView fill="WHITE" glyphName="CLOSE" layoutX="329.0" layoutY="45.0" onMouseClicked="#closeApplication" size="16" />
       <FontAwesomeIconView fill="WHITE" glyphName="COMMENTS" layoutX="26.0" layoutY="59.0" size="55" />

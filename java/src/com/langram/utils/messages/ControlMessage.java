@@ -1,16 +1,17 @@
 package com.langram.utils.messages;
 
+import com.langram.utils.User;
+import com.langram.utils.exchange.network.controller.NetworkControllerMessageType;
+
 public class ControlMessage extends Message {
 
     private NetworkControllerMessageType type;
-    private String content;
-
-    public enum NetworkControllerMessageType { CheckForUniqueUsername, CheckForUniqueUsernameReply }
+    private String content = "";
 
     public ControlMessage(NetworkControllerMessageType type, String content)
     {
         super(MessageType.CONTROL_MESSAGE);
-        this.senderName = "CONTROL";
+        this.senderName = (User.getInstance() != null) ? User.getInstance().getUsername() : "CONTROL";
         this.type = type;
         this.content = content;
     }
@@ -22,4 +23,6 @@ public class ControlMessage extends Message {
     public String getContent() {
         return content;
     }
+
+    public String getSenderName() { return this.senderName; }
 }
