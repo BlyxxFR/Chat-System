@@ -26,7 +26,7 @@ public abstract class App extends Application {
 
     public App() {
         globalMessages = ResourceBundle.getBundle("GlobalMessagesBundle", Settings.getInstance().getLocale());
-        instance = this;
+        this.instance = this;
     }
     public static App getInstance() {
         return instance;

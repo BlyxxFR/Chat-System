@@ -7,18 +7,15 @@ public class Settings {
 
     private HashMap<String, String> params = new HashMap<>();
     private Locale locale = new Locale("fr", "FR");
-    private String username = "";
-    private static Settings instance = null;
+    private static final Settings instance = new Settings();
 
     // Get instance
     public static Settings getInstance() {
-        if(instance == null)
-            instance = new Settings();
         return instance;
     }
 
     // Init locale and params
-    Settings() {
+    private Settings() {
         Locale.setDefault(locale);
         System.setProperty("java.net.preferIPv4Stack" , "true");
         params.put("AppName", "Langram");
@@ -54,10 +51,4 @@ public class Settings {
         return 500;
     }
 
-    // @return String Username
-    public String getUsername() { return this.username; }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
 }

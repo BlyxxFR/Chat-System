@@ -4,6 +4,7 @@ import com.jfoenix.controls.JFXListView;
 import com.jfoenix.controls.JFXTextArea;
 import com.langram.utils.CommonController;
 import com.langram.utils.Settings;
+import com.langram.utils.User;
 import com.langram.utils.exchange.network.IPAddressValidator;
 import com.langram.utils.exchange.network.IncomingMessageListener;
 import com.langram.utils.exchange.network.MessageReceiverThread;
@@ -57,10 +58,10 @@ public class Controller extends CommonController implements javafx.fxml.Initiali
         mainMessages = ResourceBundle.getBundle("MainMessagesBundle", Settings.getInstance().getLocale());
         projectsLabel.setText(mainMessages.getString("projects"));
         onlineLabel.setText(mainMessages.getString("online"));
-        displayUsername.setText(Settings.getInstance().getUsername());
+        displayUsername.setText(User.getInstance().getUsername());
 
         // Set private message label
-        int privateMessageCounter = 3;
+        int privateMessageCounter = User.getInstance().getPrivateMessageCount();
         privateMessageLabel.setText(String.format(mainMessages.getString(privateMessageCounter > 1 ? "new_message_plural" : "new_message"), privateMessageCounter));
         privateMessagesEnvelope.setGlyphName(privateMessageCounter > 0 ? "ENVELOPE_ALT" : "ENVELOPE_OPEN_ALT");
 
@@ -139,14 +140,16 @@ public class Controller extends CommonController implements javafx.fxml.Initiali
     }
 
     public void sendMessage() {
-        Message message = new TextMessage(Settings.getInstance().getUsername(), textMessage.getText());
-        MessageSenderService messageSender = new MessageSenderService();
-        try {
-            messageSender.sendMessageOn(currentChannel, 4488, MessageSenderService.SendingMode.MULTICAST, message);
-        } catch (UnsupportedSendingModeException | IOException e) {
-            e.printStackTrace();
+        if(!textMessage.getText().isEmpty()) {
+            Message message = new TextMessage(User.getInstance().getUsername(), textMessage.getText());
+            MessageSenderService messageSender = new MessageSenderService();
+            try {
+                messageSender.sendMessageOn(currentChannel, 4488, MessageSenderService.SendingMode.MULTICAST, message);
+            } catch (UnsupportedSendingModeException | IOException e) {
+                e.printStackTrace();
+            }
+            textMessage.setText("");
         }
-        textMessage.setText("");
     }
 }
 
