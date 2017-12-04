@@ -20,6 +20,7 @@ public class Settings {
     // Init locale and params
     Settings() {
         Locale.setDefault(locale);
+        System.setProperty("java.net.preferIPv4Stack" , "true");
         params.put("AppName", "Langram");
     }
 
