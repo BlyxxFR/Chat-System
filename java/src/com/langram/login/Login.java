@@ -22,7 +22,6 @@ public class Login extends App {
 
         // Show the stage
         stage.show();
-
     }
 }
 

@@ -7,7 +7,8 @@ public abstract class Message implements Serializable
 {
     public enum MessageType {
         TEXT_MESSAGE,
-        FILE_MESSAGE
+        FILE_MESSAGE,
+        CONTROL_MESSAGE
     }
 
     protected Date date;

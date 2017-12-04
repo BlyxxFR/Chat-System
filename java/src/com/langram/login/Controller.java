@@ -4,6 +4,7 @@ import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
 import com.langram.utils.CommonController;
 import com.langram.utils.Settings;
+import com.langram.utils.User;
 import javafx.scene.control.Button;
 
 import java.net.URL;
@@ -27,7 +28,7 @@ public class Controller extends CommonController implements javafx.fxml.Initiali
 
 
     public void login() throws Exception {
-        Settings.getInstance().setUsername(usernameText.getText());
+        new User(usernameText.getText());
         Login.getInstance().replaceSceneContent("main.fxml", Settings.getInstance().getDefaultWidth(), Settings.getInstance().getDefaultHeight());
     }
 }
