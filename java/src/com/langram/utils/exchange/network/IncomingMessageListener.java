@@ -1,4 +1,4 @@
-package com.langram.utils.exchange;
+package com.langram.utils.exchange.network;
 
 import com.langram.utils.messages.Message;
 

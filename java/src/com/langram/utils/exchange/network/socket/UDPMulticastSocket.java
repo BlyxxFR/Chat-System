@@ -1,4 +1,4 @@
-package com.langram.utils.exchange.socket;
+package com.langram.utils.exchange.network.socket;
 
 import java.io.IOException;
 import java.net.InetAddress;

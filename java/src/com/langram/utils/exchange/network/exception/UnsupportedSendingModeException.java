@@ -1,3 +1,3 @@
-package com.langram.utils.exchange.exception;
+package com.langram.utils.exchange.network.exception;
 
 public class UnsupportedSendingModeException extends Throwable { }

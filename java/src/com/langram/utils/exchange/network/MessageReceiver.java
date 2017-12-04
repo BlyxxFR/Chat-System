@@ -1,4 +1,4 @@
-package com.langram.utils.exchange;
+package com.langram.utils.exchange.network;
 
 import java.io.IOException;
 

@@ -1,8 +1,8 @@
-package com.langram.utils.exchange;
+package com.langram.utils.exchange.network;
 
-import com.langram.utils.exchange.exception.UnsupportedSendingModeException;
-import com.langram.utils.exchange.socket.UDPMulticastSocket;
-import com.langram.utils.exchange.socket.UDPSocket;
+import com.langram.utils.exchange.network.exception.UnsupportedSendingModeException;
+import com.langram.utils.exchange.network.socket.UDPMulticastSocket;
+import com.langram.utils.exchange.network.socket.UDPSocket;
 import com.langram.utils.messages.Message;
 
 import java.io.IOException;

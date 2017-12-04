@@ -1,10 +1,10 @@
-package com.langram.utils.exchange;
+package com.langram.utils.exchange.network;
 
 import javafx.concurrent.Task;
 
 import java.io.IOException;
 
-import static com.langram.utils.exchange.MessageSenderService.SendingMode.MULTICAST;
+import static com.langram.utils.exchange.network.MessageSenderService.SendingMode.MULTICAST;
 
 public class MessageReceiverThread {
 

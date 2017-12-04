@@ -1,6 +1,6 @@
-package com.langram.utils.exchange;
+package com.langram.utils.exchange.network;
 
-import com.langram.utils.exchange.socket.UDPSocket;
+import com.langram.utils.exchange.network.socket.UDPSocket;
 
 import java.io.IOException;
 
@@ -12,9 +12,7 @@ public class UnicastMessageReceiverService implements MessageReceiver {
         UDPSocket socket = null;
         try {
             socket = new UDPSocket(port);
-            while (true) {
-                socket.receive(BUFFER_SIZE, messageListener);
-            }
+            while (true) socket.receive(BUFFER_SIZE, messageListener);
         } catch (Exception e) {
             e.printStackTrace();
         }

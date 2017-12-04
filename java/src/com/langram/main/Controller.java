@@ -4,11 +4,11 @@ import com.jfoenix.controls.JFXListView;
 import com.jfoenix.controls.JFXTextArea;
 import com.langram.utils.CommonController;
 import com.langram.utils.Settings;
-import com.langram.utils.exchange.IPAddressValidator;
-import com.langram.utils.exchange.IncomingMessageListener;
-import com.langram.utils.exchange.MessageReceiverThread;
-import com.langram.utils.exchange.MessageSenderService;
-import com.langram.utils.exchange.exception.UnsupportedSendingModeException;
+import com.langram.utils.exchange.network.IPAddressValidator;
+import com.langram.utils.exchange.network.IncomingMessageListener;
+import com.langram.utils.exchange.network.MessageReceiverThread;
+import com.langram.utils.exchange.network.MessageSenderService;
+import com.langram.utils.exchange.network.exception.UnsupportedSendingModeException;
 import com.langram.utils.messages.Message;
 import com.langram.utils.messages.MessageDisplay;
 import com.langram.utils.messages.TextMessage;
@@ -26,7 +26,7 @@ import java.util.HashMap;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
-import static com.langram.utils.exchange.MessageSenderService.SendingMode.MULTICAST;
+import static com.langram.utils.exchange.network.MessageSenderService.SendingMode.MULTICAST;
 
 public class Controller extends CommonController implements javafx.fxml.Initializable {
 

@@ -1,6 +1,6 @@
-package com.langram.utils.exchange.socket;
+package com.langram.utils.exchange.network.socket;
 
-import com.langram.utils.exchange.IncomingMessageListener;
+import com.langram.utils.exchange.network.IncomingMessageListener;
 import com.langram.utils.messages.Message;
 
 import java.io.*;
