@@ -56,9 +56,7 @@ public class UDPSocket
         ObjectOutputStream stream = new ObjectOutputStream(byteStream);
         stream.writeObject(message);
         byte[] data = byteStream.toByteArray();
-        DatagramPacket packet = new DatagramPacket(data, data.length,
-                rcvrAddress, rcvrPort);
-        System.out.println(packet.toString());
+        DatagramPacket packet = new DatagramPacket(data, data.length, rcvrAddress, rcvrPort);
         socket.send(packet);
     }
 
