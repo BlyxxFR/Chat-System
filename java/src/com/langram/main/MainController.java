@@ -141,7 +141,6 @@ public class MainController extends CommonController implements javafx.fxml.Init
         final Runnable getConnectedUsersList = (() -> {
             if (!User.getInstance().getActiveChannel().equals("none")) {
                 Platform.runLater(() -> {
-                    System.out.println("CHIBRE");
                             ArrayList<String> connectedUsers = NetworkControllerAction.getInstance().getConnectedUsersToAChannel(User.getInstance().getActiveChannel());
                             connectedUsersList.getItems().clear();
                             connectedUsersList.getItems().addAll(connectedUsers);
