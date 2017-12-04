@@ -9,6 +9,7 @@ import com.langram.utils.exchange.network.IPAddressValidator;
 import com.langram.utils.exchange.network.IncomingMessageListener;
 import com.langram.utils.exchange.network.MessageReceiverThread;
 import com.langram.utils.exchange.network.MessageSenderService;
+import com.langram.utils.exchange.network.controller.NetworkController;
 import com.langram.utils.exchange.network.exception.UnsupportedSendingModeException;
 import com.langram.utils.messages.Message;
 import com.langram.utils.messages.MessageDisplay;
@@ -22,11 +23,13 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.StageStyle;
 
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
+import static com.langram.utils.exchange.network.MessageSenderService.MULTICAST_PORT_LISTENER;
 import static com.langram.utils.exchange.network.MessageSenderService.SendingMode.MULTICAST;
 
 public class Controller extends CommonController implements javafx.fxml.Initializable {
@@ -53,6 +56,8 @@ public class Controller extends CommonController implements javafx.fxml.Initiali
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         super.initialize(location, resources);
+
+        NetworkController.getInstance().start();
 
         // Load labels
         mainMessages = ResourceBundle.getBundle("MainMessagesBundle", Settings.getInstance().getLocale());
@@ -83,7 +88,7 @@ public class Controller extends CommonController implements javafx.fxml.Initiali
     }
 
     public class onReceivedMessage implements IncomingMessageListener {
-        public void onNewIncomingMessage(final Message message) {
+        public void onNewIncomingMessage(final Message message, InetAddress senderAddress, int senderPort) {
             Platform.runLater(
                     () -> {
                         messagesList.getItems().add(message);
@@ -94,7 +99,7 @@ public class Controller extends CommonController implements javafx.fxml.Initiali
     }
 
     public class onReceivedPrivateMessage implements IncomingMessageListener {
-        public void onNewIncomingMessage(final Message message) {
+        public void onNewIncomingMessage(final Message message, InetAddress senderAddress, int senderPort) {
             Platform.runLater(
                     () -> {
 
@@ -123,7 +128,7 @@ public class Controller extends CommonController implements javafx.fxml.Initiali
         if (ipAddress != null) {
             if (!listenerMap.containsKey(ipAddress)) {
                 // Start thread listener
-                MessageReceiverThread listenerThread = new MessageReceiverThread(MULTICAST, ipAddress, 4488, new onReceivedMessage());
+                MessageReceiverThread listenerThread = new MessageReceiverThread(MULTICAST, ipAddress, MULTICAST_PORT_LISTENER, new onReceivedMessage());
                 listenerMap.put(ipAddress, listenerThread);
                 listenerThread.start();
             }
@@ -144,7 +149,7 @@ public class Controller extends CommonController implements javafx.fxml.Initiali
             Message message = new TextMessage(User.getInstance().getUsername(), textMessage.getText());
             MessageSenderService messageSender = new MessageSenderService();
             try {
-                messageSender.sendMessageOn(currentChannel, 4488, MessageSenderService.SendingMode.MULTICAST, message);
+                messageSender.sendMessageOn(currentChannel, MULTICAST_PORT_LISTENER, MessageSenderService.SendingMode.MULTICAST, message);
             } catch (UnsupportedSendingModeException | IOException e) {
                 e.printStackTrace();
             }

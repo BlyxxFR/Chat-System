@@ -5,8 +5,7 @@
 <?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="365.0" style="-fx-background-color: EEEEEE;" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.langram.login.Controller">
     <Pane prefHeight="80.0" prefWidth="365.0" style="-fx-background-color: #013243;">
@@ -38,4 +37,9 @@
          <Font name="Lato Regular" size="15.0" />
       </font>
    </JFXPasswordField>
+   <Label fx:id="loginStatus" alignment="CENTER" layoutX="25.0" layoutY="344.0" textAlignment="CENTER" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="25.0">
+      <font>
+         <Font name="Lato Regular" size="16.0" />
+      </font>
+   </Label>
 </AnchorPane>

@@ -27,6 +27,11 @@ public abstract class App extends Application {
     public App() {
         globalMessages = ResourceBundle.getBundle("GlobalMessagesBundle", Settings.getInstance().getLocale());
         this.instance = this;
+        // Clean exit thread when application shutdown
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            // what you want to do
+            System.out.println("Exit");
+        }));
     }
     public static App getInstance() {
         return instance;

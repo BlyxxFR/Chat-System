@@ -34,11 +34,10 @@ public class MessageReceiverThread {
         this.backgroundThread = new Thread(backgroundTask);
     }
 
-    public void start() {
-        this.backgroundThread.start();
-    }
+    public void start() { this.backgroundThread.start(); }
 
-    public void stop() {
-        this.backgroundThread.interrupt();
-    }
+    public void stop() { this.backgroundThread.interrupt(); }
+
+    public Thread.State status() { return this.backgroundThread.getState(); }
+
 }

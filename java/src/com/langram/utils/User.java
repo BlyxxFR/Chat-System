@@ -2,7 +2,7 @@ package com.langram.utils;
 
 public class User {
     private static User instance = null;
-    private String username;
+    private String username = "";
 
     public User(String username) {
         instance = this;

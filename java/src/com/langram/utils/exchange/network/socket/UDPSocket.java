@@ -22,25 +22,13 @@ public class UDPSocket
         this.socket = socket;
     }
 
-    public UDPSocket() throws SocketException
-    {
-        this(new DatagramSocket());
-    }
-
     public UDPSocket(int port) throws SocketException
     {
         this(new DatagramSocket(port));
     }
 
-    //getters
-    public InetAddress getSenderAddress()
-    {
-        return senderAddress;
-    }
-
-    public int getSenderPort()
-    {
-        return senderPort;
+    public UDPSocket() throws SocketException {
+        this(new DatagramSocket());
     }
 
     //setters
@@ -75,10 +63,10 @@ public class UDPSocket
         try {
             Message message = (Message) o_in.readObject();
 
-            inPacket.setLength(data.length); // must reset length field!
-            b_in.reset(); // reset so next read is from start of byte[] again
+            inPacket.setLength(data.length);
+            b_in.reset();
 
-            messageListener.onNewIncomingMessage(message);
+            messageListener.onNewIncomingMessage(message, senderAddress, senderPort);
         } catch (ClassNotFoundException e2) {
             e2.printStackTrace();
         }
