@@ -5,6 +5,10 @@ import java.util.Locale;
 
 public class Settings {
 
+    public static final int DEFAULT_WIDTH = 1024;
+    public static final int DEFAULT_HEIGHT = 568;
+    public static final int LOGIN_WIDTH = 365;
+    public static final int LOGIN_HEIGHT = 500;
     private HashMap<String, String> params = new HashMap<>();
     private Locale locale = new Locale("fr", "FR");
     private static final Settings instance = new Settings();
@@ -33,22 +37,22 @@ public class Settings {
 
     // @return int Application Width
     public int getDefaultWidth() {
-        return 1024;
+        return DEFAULT_WIDTH;
     }
 
     // @return int Application Height
     public int getDefaultHeight() {
-        return 568;
+        return DEFAULT_HEIGHT;
     }
 
     // @return int Application Login Width
     public int getLoginWidth() {
-        return 365;
+        return LOGIN_WIDTH;
     }
 
     // @return int Application Login Height
     public int getLoginHeight() {
-        return 500;
+        return LOGIN_HEIGHT;
     }
 
 }

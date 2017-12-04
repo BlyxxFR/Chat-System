@@ -33,8 +33,6 @@ public class NetworkController {
         }
     }
 
-    private void send
-
     private class onReceivedControlMessage implements IncomingMessageListener {
         public void onNewIncomingMessage(final Message message) {
             Platform.runLater(
