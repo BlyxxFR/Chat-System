@@ -6,14 +6,14 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.*;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 
 
 public class MessageDisplay extends ListCell<Message> {
 
-    private double maxWidth;
-
-    private Label textLabel = new Label();
+    private final Label textLabel = new Label();
     {
         textLabel.setWrapText(true);
         textLabel.maxWidthProperty().bind(Bindings.createDoubleBinding(

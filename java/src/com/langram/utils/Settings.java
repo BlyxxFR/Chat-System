@@ -5,10 +5,10 @@ import java.util.Locale;
 
 public class Settings {
 
-    public static final int DEFAULT_WIDTH = 1024;
-    public static final int DEFAULT_HEIGHT = 568;
-    public static final int LOGIN_WIDTH = 365;
-    public static final int LOGIN_HEIGHT = 500;
+    private static final int DEFAULT_WIDTH = 1024;
+    private static final int DEFAULT_HEIGHT = 568;
+    private static final int LOGIN_WIDTH = 365;
+    private static final int LOGIN_HEIGHT = 500;
     private HashMap<String, String> params = new HashMap<>();
     private Locale locale = new Locale("fr", "FR");
     private static final Settings instance = new Settings();

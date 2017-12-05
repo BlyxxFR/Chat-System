@@ -2,13 +2,11 @@ package com.langram.utils.exchange.network;
 
 import com.langram.utils.exchange.network.socket.UDPMulticastSocket;
 
-import java.io.IOException;
-
 public class MulticastMessageReceiverService implements MessageReceiver {
 
     private static final int BUFFER_SIZE = 1024;
 
-    public void listenOnPort(String ipAddress, int port, IncomingMessageListener messageListener) throws IOException {
+    public void listenOnPort(String ipAddress, int port, IncomingMessageListener messageListener) {
         UDPMulticastSocket socket = null;
         try
         {

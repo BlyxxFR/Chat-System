@@ -50,19 +50,13 @@ public class MessageSenderService {
     }
 
     private void sendMulticastMessageOn(String ipAddress, int port, Message message) throws IOException {
-        UDPMulticastSocket socket = null;
-        try {
-            socket = new UDPMulticastSocket();
-            socket.setTimeout(TIMEOUT);
-            socket.join(ipAddress);
-            InetAddress srvrAddress = InetAddress.getByName(ipAddress);
-            socket.send(message, srvrAddress, port);
-            socket.leave(ipAddress);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        if (socket != null)
-            socket.close();
+        UDPMulticastSocket socket = new UDPMulticastSocket();
+        socket.setTimeout(TIMEOUT);
+        socket.join(ipAddress);
+        InetAddress srvrAddress = InetAddress.getByName(ipAddress);
+        socket.send(message, srvrAddress, port);
+        socket.leave(ipAddress);
+        socket.close();
     }
 
     private ArrayList<ControlMessage> getReplies() throws IOException {

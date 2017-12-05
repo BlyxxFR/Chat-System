@@ -6,7 +6,6 @@ import java.util.regex.Pattern;
 public class IPAddressValidator {
 
     private Pattern pattern;
-    private Matcher matcher;
 
     private static final String IPADDRESS_PATTERN =
                     "^([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." +
@@ -25,7 +24,7 @@ public class IPAddressValidator {
      * @return true valid ip address, false invalid ip address
      */
     public boolean validate(final String ip) {
-        matcher = pattern.matcher(ip);
+        Matcher matcher = pattern.matcher(ip);
         return matcher.matches();
     }
 }

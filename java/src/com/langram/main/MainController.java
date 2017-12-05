@@ -137,7 +137,7 @@ public class MainController extends CommonController implements javafx.fxml.Init
         );
     }
 
-    public void getConnectedUsersListOnActiveChannelPeriodically() {
+    private void getConnectedUsersListOnActiveChannelPeriodically() {
         final Runnable getConnectedUsersList = (() -> {
             if (!User.getInstance().getActiveChannel().equals("none")) {
                 Platform.runLater(() -> {

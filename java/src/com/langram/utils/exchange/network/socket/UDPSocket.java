@@ -11,13 +11,12 @@ import java.net.SocketException;
 
 public class UDPSocket
 {
-    private static final int BUFFER_SIZE = 1024;
-    protected DatagramSocket socket;
+    DatagramSocket socket;
     private InetAddress senderAddress;
     private int senderPort;
 
     //constructors
-    protected UDPSocket(DatagramSocket socket)
+    UDPSocket(DatagramSocket socket)
     {
         this.socket = socket;
     }
