@@ -12,7 +12,7 @@ public class ChannelRepository implements RepositoryInterface<Channel>
 	@Override
 	public void store(Channel c) {
 
-		String sql = "INSERT INTO channel(id,identifiant,ipAdress) VALUES(?,?)";
+		String sql = "INSERT INTO channel(id,channelName,ipAddress) VALUES(?,?)";
 
 		PreparedStatement pstmt = db.preparedStatement(sql);
 
