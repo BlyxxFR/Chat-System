@@ -7,7 +7,7 @@ import com.langram.utils.Settings;
 import com.langram.utils.User;
 import com.langram.utils.exchange.network.IPAddressValidator;
 import com.langram.utils.exchange.network.IncomingMessageListener;
-import com.langram.utils.exchange.network.MessageReceiverThread;
+import com.langram.utils.exchange.network.MessageReceiverTask;
 import com.langram.utils.exchange.network.MessageSenderService;
 import com.langram.utils.exchange.network.controller.NetworkController;
 import com.langram.utils.exchange.network.controller.NetworkControllerAction;
@@ -27,11 +27,8 @@ import javafx.stage.StageStyle;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Optional;
 import java.util.ResourceBundle;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
 
 import static com.langram.utils.exchange.network.MessageSenderService.MULTICAST_PORT_LISTENER;
 import static com.langram.utils.exchange.network.MessageSenderService.SendingMode.MULTICAST;
@@ -57,8 +54,6 @@ public class MainController extends CommonController implements javafx.fxml.Init
 
     private String currentChannel = null;
     private ResourceBundle mainMessages;
-    private HashMap<String, MessageReceiverThread> listenerMap = new HashMap<>();
-    private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
     private static MainController instance;
 
@@ -166,21 +161,13 @@ public class MainController extends CommonController implements javafx.fxml.Init
         IPAddressValidator ipAddressValidator = new IPAddressValidator();
         if (ipAddressValidator.validate(entered)) {
             projectsList.getItems().add(entered);
+            threadsPool.submit(new MessageReceiverTask(MULTICAST, entered, MULTICAST_PORT_LISTENER, new onReceivedMessage()).get());
         }
     }
 
     public void goToChannel() {
         String ipAddress = projectsList.getSelectionModel().getSelectedItems().get(0);
         if (ipAddress != null) {
-            // TODO : Change to thread pool
-            if (!listenerMap.containsKey(ipAddress)) {
-                // Start thread listener
-                MessageReceiverThread listenerThread = new MessageReceiverThread(MULTICAST, ipAddress, MULTICAST_PORT_LISTENER, new onReceivedMessage());
-                listenerMap.put(ipAddress, listenerThread);
-                listenerThread.start();
-                User.getInstance().addAnActiveChannel(ipAddress);
-            }
-
             Platform.runLater(
                     () -> {
                         // Get connected users on channel

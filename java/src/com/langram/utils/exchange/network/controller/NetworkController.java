@@ -1,6 +1,6 @@
 package com.langram.utils.exchange.network.controller;
 
-import com.langram.utils.exchange.network.MessageReceiverThread;
+import com.langram.utils.exchange.network.MessageReceiverTask;
 import com.langram.utils.exchange.network.MessageSenderService;
 import com.langram.utils.exchange.network.exception.UnsupportedSendingModeException;
 import com.langram.utils.messages.ControlMessage;
@@ -8,6 +8,8 @@ import com.langram.utils.messages.Message;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import static com.langram.utils.exchange.network.MessageSenderService.CONTROL_PORT_LISTENER;
 import static com.langram.utils.exchange.network.MessageSenderService.MULTICAST_PORT_LISTENER;
@@ -17,12 +19,12 @@ public class NetworkController {
 
     private final static String BROADCAST_IP = "224.0.0.1";
     private static NetworkController instance = new NetworkController();
-    private MessageReceiverThread backgroundThread;
+    private ExecutorService threadPool;
 
     public void start() {
-        if (backgroundThread == null || backgroundThread.status() == Thread.State.NEW) {
-            this.backgroundThread = new MessageReceiverThread(MULTICAST, BROADCAST_IP, MULTICAST_PORT_LISTENER, new NetworkControllerMessageReceiver.onReceivedControlMessage());
-            this.backgroundThread.start();
+        if (threadPool == null) {
+            this.threadPool = Executors.newSingleThreadExecutor();
+            this.threadPool.submit(new MessageReceiverTask(MULTICAST, BROADCAST_IP, MULTICAST_PORT_LISTENER, new NetworkControllerMessageReceiver.onReceivedControlMessage()).get());
         }
     }
 

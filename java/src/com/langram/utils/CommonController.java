@@ -4,17 +4,31 @@ import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 
 public class CommonController implements javafx.fxml.Initializable {
 
-    private static ResourceBundle globalMessages;
+    private static ResourceBundle globalMessages = ResourceBundle.getBundle("GlobalMessagesBundle", Settings.getInstance().getLocale());;
     public FontAwesomeIconView maximizeButton;
     public FontAwesomeIconView closeButton;
     public FontAwesomeIconView settingsButton;
 
+    protected final ExecutorService threadsPool = Executors.newCachedThreadPool();
+    protected final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+
+    public CommonController() {
+        // Clean exit thread when application shutdown
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            threadsPool.shutdown();
+            scheduler.shutdown();
+        }));
+    }
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        globalMessages = ResourceBundle.getBundle("GlobalMessagesBundle", Settings.getInstance().getLocale());
+
     }
 
     public static ResourceBundle getGlobalMessagesBundle() {

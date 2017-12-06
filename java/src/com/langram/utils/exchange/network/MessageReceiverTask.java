@@ -4,12 +4,12 @@ import javafx.concurrent.Task;
 
 import static com.langram.utils.exchange.network.MessageSenderService.SendingMode.MULTICAST;
 
-public class MessageReceiverThread {
+public class MessageReceiverTask {
 
-    private Thread backgroundThread;
+    private Task<Void> backgroundTask;
 
-    public MessageReceiverThread(MessageSenderService.SendingMode sendingMode, String ipAddress, int port, IncomingMessageListener incomingMessageListener) {
-        Task<Void> backgroundTask = new Task<Void>() {
+    public MessageReceiverTask(MessageSenderService.SendingMode sendingMode, String ipAddress, int port, IncomingMessageListener incomingMessageListener) {
+        this.backgroundTask = new Task<Void>() {
             @Override
             protected Void call() throws Exception {
                 return null;
@@ -26,13 +26,8 @@ public class MessageReceiverThread {
 
             }
         };
-        this.backgroundThread = new Thread(backgroundTask);
     }
 
-    public void start() { this.backgroundThread.start(); }
-
-    public void stop() { this.backgroundThread.interrupt(); }
-
-    public Thread.State status() { return this.backgroundThread.getState(); }
+    public Task<Void> get() { return this.backgroundTask; }
 
 }
