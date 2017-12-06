@@ -15,6 +15,7 @@ public class Channel
 	private UUID id;
 	private String ipAddress;
 	private String channelName;
+	private boolean active;
 
 	public Channel(String n, String ip)
 	{
@@ -24,7 +25,7 @@ public class Channel
 
 		System.out.println("Nouveau Channel : ["
 				+ this.id + "] "
-				+ this.channelName + " "
+				+ this.channelName + " - "
 				+ this.ipAddress);
 	}
 
@@ -39,4 +40,6 @@ public class Channel
 	public UUID getId() {
 		return this.id;
 	}
+
+	public boolean isActive() {return this.active; }
 }
