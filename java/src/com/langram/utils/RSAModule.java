@@ -63,7 +63,7 @@ public class RSAModule {
             out.write(encoder.encodeToString(pub.getEncoded()).getBytes(Charset.forName("UTF-8")));
             out.close();
         } catch (Exception e) {
-            System.out.println(e);
+            e.printStackTrace();
         }
 
     }

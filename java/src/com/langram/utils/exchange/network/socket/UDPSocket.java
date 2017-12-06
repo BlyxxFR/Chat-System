@@ -11,20 +11,14 @@ import java.net.SocketException;
 
 public class UDPSocket
 {
-    private static final int BUFFER_SIZE = 1024;
-    protected DatagramSocket socket;
+    DatagramSocket socket;
     private InetAddress senderAddress;
     private int senderPort;
 
     //constructors
-    protected UDPSocket(DatagramSocket socket)
+    UDPSocket(DatagramSocket socket)
     {
         this.socket = socket;
-    }
-
-    public UDPSocket() throws SocketException
-    {
-        this(new DatagramSocket());
     }
 
     public UDPSocket(int port) throws SocketException
@@ -32,15 +26,8 @@ public class UDPSocket
         this(new DatagramSocket(port));
     }
 
-    //getters
-    public InetAddress getSenderAddress()
-    {
-        return senderAddress;
-    }
-
-    public int getSenderPort()
-    {
-        return senderPort;
+    public UDPSocket() throws SocketException {
+        this(new DatagramSocket());
     }
 
     //setters
@@ -75,10 +62,10 @@ public class UDPSocket
         try {
             Message message = (Message) o_in.readObject();
 
-            inPacket.setLength(data.length); // must reset length field!
-            b_in.reset(); // reset so next read is from start of byte[] again
+            inPacket.setLength(data.length);
+            b_in.reset();
 
-            messageListener.onNewIncomingMessage(message);
+            messageListener.onNewIncomingMessage(message, senderAddress.toString().substring(1), senderPort);
         } catch (ClassNotFoundException e2) {
             e2.printStackTrace();
         }

@@ -11,11 +11,11 @@ public abstract class Message implements Serializable
         CONTROL_MESSAGE
     }
 
-    protected Date date;
-    protected MessageType messageType;
-    protected String senderName;
+    private Date date;
+    private MessageType messageType;
+    String senderName;
 
-    public Message(MessageType t)
+    Message(MessageType t)
     {
         this.date = new Date();
         this.messageType = t;

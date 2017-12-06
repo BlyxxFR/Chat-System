@@ -43,7 +43,7 @@ class ResizeHelper {
     static class ResizeListener implements EventHandler<MouseEvent> {
         private Stage stage;
         private Cursor cursorEvent = Cursor.DEFAULT;
-        private int border = 4;
+        private final static int border = 4;
         private double startX = 0;
         private double startY = 0;
 
