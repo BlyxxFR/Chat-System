@@ -13,27 +13,27 @@ import java.util.UUID;
 public class Channel
 {
 	private UUID id;
-	private String ipAdress;
-	private String identifiant;
+	private String ipAddress;
+	private String channelName;
 
 	public Channel(String n, String ip)
 	{
 		this.id = UUID.randomUUID();
-		this.identifiant = n;
-		this.ipAdress = ip;
+		this.channelName = n;
+		this.ipAddress = ip;
 
 		System.out.println("Nouveau Channel : ["
 				+ this.id + "] "
-				+ this.identifiant + " "
-				+ this.ipAdress);
+				+ this.channelName + " "
+				+ this.ipAddress);
 	}
 
-	public String getIdentifiant() {
-		return this.identifiant;
+	public String getChannelName() {
+		return this.channelName;
 	}
 
-	public String getIpAdress() {
-		return this.ipAdress;
+	public String getIpAddress() {
+		return this.ipAddress;
 	}
 
 	public UUID getId() {

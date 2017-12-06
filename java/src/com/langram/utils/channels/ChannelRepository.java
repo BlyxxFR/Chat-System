@@ -18,8 +18,8 @@ public class ChannelRepository implements RepositoryInterface<Channel>
 
 		try {
 			pstmt.setInt(1, 10);
-			pstmt.setString(2, c.getIdentifiant());
-			pstmt.setString(3, c.getIpAdress());
+			pstmt.setString(2, c.getChannelName());
+			pstmt.setString(3, c.getIpAddress());
 			pstmt.executeUpdate();
 		} catch (SQLException e) {
 			System.out.println("ICI");
