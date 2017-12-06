@@ -9,10 +9,11 @@ public class ChannelRepository implements RepositoryInterface<Channel>
 {
 	private static DatabaseStore db = DatabaseStore.getInstance();
 
+
 	@Override
 	public void store(Channel c) {
 
-		String sql = "INSERT INTO channel(id,channelName,ipAddress) VALUES(?,?)";
+		String sql = "INSERT INTO channel(id,channelName,ipAddress) VALUES(?,?,?)";
 
 		PreparedStatement pstmt = db.preparedStatement(sql);
 
@@ -20,7 +21,7 @@ public class ChannelRepository implements RepositoryInterface<Channel>
 			pstmt.setInt(1, 10);
 			pstmt.setString(2, c.getChannelName());
 			pstmt.setString(3, c.getIpAddress());
-			pstmt.executeUpdate();
+			pstmt.execute();
 		} catch (SQLException e) {
 			System.out.println("ICI");
 			e.printStackTrace();

@@ -24,6 +24,7 @@ public class DatabaseStore {
 	public static synchronized DatabaseStore getInstance() {
 		if (databaseStore == null) {
 			databaseStore = new DatabaseStore();
+			databaseStore.createSchema();
 		}
 		return databaseStore;
 	}
@@ -59,8 +60,8 @@ public class DatabaseStore {
 		// SQL statement for creating a new table
 		String sql = "CREATE TABLE IF NOT EXISTS channel (\n"
 				+ "	id INTEGER PRIMARY KEY,\n"
-				+ "	nom TEXT NOT NULL,\n"
-				+ "	ipAdress VARCHAR(15)\n"
+				+ "	channelName TEXT NOT NULL,\n"
+				+ "	ipAddress VARCHAR(15)\n"
 				+ ");";
 
 		try (Connection conn = this.connect()) {
@@ -83,12 +84,11 @@ public class DatabaseStore {
 	public PreparedStatement preparedStatement(String sql)
 	{
 		try (Connection conn = this.connect();
-			 PreparedStatement pstmt = conn.prepareStatement(sql)) {
+			PreparedStatement pstmt = conn.prepareStatement(sql)) {
 			return pstmt;
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-
 		return null;
 	}
 
