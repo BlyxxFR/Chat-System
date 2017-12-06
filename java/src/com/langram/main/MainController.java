@@ -162,6 +162,7 @@ public class MainController extends CommonController implements javafx.fxml.Init
         if (ipAddressValidator.validate(entered)) {
             projectsList.getItems().add(entered);
             threadsPool.submit(new MessageReceiverTask(MULTICAST, entered, MULTICAST_PORT_LISTENER, new onReceivedMessage()).get());
+            User.getInstance().addAnActiveChannel(entered);
         }
     }
 
