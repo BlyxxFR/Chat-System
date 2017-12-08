@@ -120,7 +120,6 @@ public class ChannelRepository implements RepositoryInterface<Channel> {
                 if(rs.isBeforeFirst()) {
                     rs.next();
                     this.currentChannel = new Channel(rs.getString("channelName"), rs.getString("ipAddress"));
-                    System.out.println("jkloreerl");
                     rs.close();
                 }
             } catch (SQLException e) {
