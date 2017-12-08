@@ -1,5 +1,7 @@
 package com.langram.utils.channels;
 
+import java.util.ArrayList;
+
 /**
  * This file is part of the project java.
  *
@@ -11,5 +13,5 @@ package com.langram.utils.channels;
 public interface RepositoryInterface<E> {
 
 	void store(E e);
-	E retrieve();
+	ArrayList<E> retrieveAll();
 }

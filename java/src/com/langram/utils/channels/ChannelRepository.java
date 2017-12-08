@@ -2,9 +2,9 @@ package com.langram.utils.channels;
 
 import com.langram.utils.exchange.database.DatabaseStore;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.UUID;
 
 public class ChannelRepository implements RepositoryInterface<Channel>
 {
@@ -28,9 +28,34 @@ public class ChannelRepository implements RepositoryInterface<Channel>
 	}
 
 	@Override
-	public Channel retrieve() {
+	public ArrayList<Channel> retrieveAll() {
 		return null;
 	}
+
+	public boolean channelExistsWIthIp(String ip) {
+		String sql = "SELECT id FROM channel";
+
+		try (Connection conn = db.connect();
+			 Statement stmt  = conn.createStatement();
+			 ResultSet rs    = stmt.executeQuery(sql)){
+
+			if(rs)
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		}
+	}
+
+	public void switchActiveChannel(UUID activeChannelID)
+	{
+
+	}
+
+	public void deleteChannel(UUID channel)
+	{
+
+	}
+
+
 
 
 }
