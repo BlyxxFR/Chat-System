@@ -1,7 +1,5 @@
 package com.langram.utils.channels;
 
-import java.util.UUID;
-
 /**
  * This file is part of the project java.
  *
@@ -12,21 +10,13 @@ import java.util.UUID;
  */
 public class Channel
 {
-	private UUID id;
 	private String ipAddress;
 	private String channelName;
-	private boolean active;
 
 	public Channel(String n, String ip)
 	{
-		this.id = UUID.randomUUID();
 		this.channelName = n;
 		this.ipAddress = ip;
-
-		System.out.println("Nouveau Channel : ["
-				+ this.id + "] "
-				+ this.channelName + " - "
-				+ this.ipAddress);
 	}
 
 	public String getChannelName() {
@@ -37,9 +27,4 @@ public class Channel
 		return this.ipAddress;
 	}
 
-	public UUID getId() {
-		return this.id;
-	}
-
-	public boolean isActive() {return this.active; }
 }

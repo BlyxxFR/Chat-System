@@ -53,7 +53,6 @@ public class MainController extends CommonController implements javafx.fxml.Init
     public AnchorPane sendingArea;
     public JFXListView<String> connectedUsersList;
 
-    private String currentChannel = null;
     private ResourceBundle mainMessages;
 
     private static MainController instance;
@@ -93,8 +92,14 @@ public class MainController extends CommonController implements javafx.fxml.Init
         sendingArea.setDisable(true);
 
         // Load project list
-        //projectsList.getItems().add(messagesList.getItems().size(), currentChannel);
-
+        ArrayList<Channel> channelsList = ChannelRepository.getInstance().retrieveAll();
+        for(Channel channel : channelsList) {
+            projectsList.getItems().add(channel.getChannelName());
+        }
+        projectsList.getItems().sort(String::compareToIgnoreCase);
+        Channel currentChannel = ChannelRepository.getInstance().getCurrentChannel();
+        if(currentChannel != null)
+            this.goToChannel(currentChannel.getChannelName());
     }
 
     public static MainController getInstance() {
@@ -169,18 +174,21 @@ public class MainController extends CommonController implements javafx.fxml.Init
 
         result.ifPresent(pair -> {
             IPAddressValidator ipAddressValidator = new IPAddressValidator();
-            if (ipAddressValidator.validate(pair.getValue()) && !ChannelRepository.getInstance().channelExists(pair.getValue())) {
+            if (ipAddressValidator.validate(pair.getValue()) && !ChannelRepository.getInstance().isConnectedToChannel(pair.getValue())) {
                 projectsList.getItems().add(pair.getKey());
                 ChannelRepository.getInstance().store(new Channel(pair.getKey(), pair.getValue()));
                 threadsPool.submit(new MessageReceiverTask(MULTICAST, pair.getValue(), MULTICAST_PORT_LISTENER, new onReceivedMessage()).get());
 
             }
         });
-
+        projectsList.getItems().sort(String::compareToIgnoreCase);
     }
 
     public void goToChannel() {
-        String selectedChannel = projectsList.getSelectionModel().getSelectedItems().get(0);
+        this.goToChannel(projectsList.getSelectionModel().getSelectedItems().get(0));
+    }
+
+    private void goToChannel(String selectedChannel) {
         String ipAddress = ChannelRepository.getInstance().getChannelIP(selectedChannel);
 
         if (!ipAddress.equals("none")) {
@@ -196,10 +204,9 @@ public class MainController extends CommonController implements javafx.fxml.Init
             ChannelRepository.getInstance().switchToChannel(selectedChannel);
 
             // Set prompt message
-            currentChannel = ipAddress;
             sendingArea.setDisable(false);
-            textMessage.setPromptText(String.format(mainMessages.getString("prompt"), currentChannel));
-            channelName.setText(currentChannel);
+            textMessage.setPromptText(String.format(mainMessages.getString("prompt"), selectedChannel));
+            channelName.setText(selectedChannel);
         }
     }
 
@@ -211,7 +218,7 @@ public class MainController extends CommonController implements javafx.fxml.Init
             Message message = new TextMessage(User.getInstance().getUsername(), textMessage.getText());
             MessageSenderService messageSender = new MessageSenderService();
             try {
-                messageSender.sendMessageOn(currentChannel, MULTICAST_PORT_LISTENER, MessageSenderService.SendingMode.MULTICAST, message);
+                messageSender.sendMessageOn(ChannelRepository.getInstance().getCurrentChannel().getIpAddress(), MULTICAST_PORT_LISTENER, MessageSenderService.SendingMode.MULTICAST, message);
             } catch (UnsupportedSendingModeException | IOException e) {
                 e.printStackTrace();
             }
