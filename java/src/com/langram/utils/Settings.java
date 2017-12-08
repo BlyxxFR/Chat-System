@@ -1,5 +1,6 @@
 package com.langram.utils;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Locale;
 
@@ -9,7 +10,7 @@ public class Settings {
     private static final int DEFAULT_HEIGHT = 568;
     private static final int LOGIN_WIDTH = 365;
     private static final int LOGIN_HEIGHT = 500;
-    public static final String DB_RELATIVE_PATH = "/data/langram.db";
+    public static final String DB_DIRECTORY = "data";
 
     private HashMap<String, String> params = new HashMap<>();
     private Locale locale = new Locale("fr", "FR");
@@ -73,7 +74,12 @@ public class Settings {
      * @return String SQLite Database path
      */
     public String getDatabasePath() {
-        return System.getProperty("user.dir") + DB_RELATIVE_PATH;
+        String databaseName = Hash.get(User.getInstance().getUsername().toLowerCase()) + ".db";
+        return this.getDatabaseDirectory() + File.separator + databaseName;
+    }
+
+    public String getDatabaseDirectory() {
+        return System.getProperty("user.dir") + File.separator + DB_DIRECTORY;
     }
 
 }

@@ -9,6 +9,9 @@ import java.util.UUID;
 public class ChannelRepository implements RepositoryInterface<Channel>
 {
 	private static DatabaseStore db = DatabaseStore.getInstance();
+	private static ChannelRepository instance = new ChannelRepository();
+
+	public static ChannelRepository getInstance() { return instance; }
 
 	@Override
 	public void store(Channel c) {
@@ -32,20 +35,32 @@ public class ChannelRepository implements RepositoryInterface<Channel>
 		return null;
 	}
 
-	public boolean channelExistsWIthIp(String ip) {
-		String sql = "SELECT id FROM channel";
+	private ResultSet getResultSet(String sql) throws SQLException {
+        Connection conn = db.connect();
+        Statement stmt  = conn.createStatement();
+        return stmt.executeQuery(sql);
+    }
 
-		try (Connection conn = db.connect();
-			 Statement stmt  = conn.createStatement();
-			 ResultSet rs    = stmt.executeQuery(sql)){
-
-			if(rs)
-		} catch (SQLException e) {
-			System.out.println(e.getMessage());
-		}
+	public boolean channelExists(String ipAddress) {
+        try {
+            return getResultSet("SELECT id FROM channel WHERE ipAddress = '" + ipAddress + "'").isBeforeFirst();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
 	}
 
-	public void switchActiveChannel(UUID activeChannelID)
+
+	public String getChannelIP(String channelName) {
+        try {
+            return getResultSet("SELECT ipAddress FROM channel WHERE channelName = '" + channelName + "'").getString(0);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return "none";
+        }
+    }
+
+	public void switchToChannel(String channelName)
 	{
 
 	}

@@ -2,6 +2,7 @@ package com.langram.utils.exchange.database;
 
 import com.langram.utils.Settings;
 
+import java.io.File;
 import java.sql.*;
 
 /**
@@ -40,10 +41,7 @@ public class DatabaseStore {
 
 			String url = this.getConnectionUrl();
 			conn = DriverManager.getConnection(url);
-
-			System.out.println("Connection to SQLite has been established.");
-
-		} catch (SQLException e) {
+        } catch (SQLException e) {
 			System.err.println(e.getMessage());
 		}
 
@@ -51,8 +49,10 @@ public class DatabaseStore {
 	}
 
 	private void createSchema() {
+		// Create data directory
+        (new File(Settings.getInstance().getDatabaseDirectory())).mkdirs();
 
-		// SQL statement for creating a new table
+        // SQL statement for creating a new table
 		String sql = "CREATE TABLE IF NOT EXISTS channel (\n"
 				+ "	id VARCHAR PRIMARY KEY,\n"
 				+ "	channelName TEXT NOT NULL,\n"
@@ -63,9 +63,6 @@ public class DatabaseStore {
 		try (Connection conn = this.connect()) {
 			if (conn != null) {
 				DatabaseMetaData meta = conn.getMetaData();
-				System.out.println("The driver name is " + meta.getDriverName());
-				System.out.println("A new database has been created.");
-
 				Statement stmt = conn.createStatement();
 				stmt.execute(sql);
 

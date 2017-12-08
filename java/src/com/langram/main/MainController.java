@@ -5,6 +5,8 @@ import com.jfoenix.controls.JFXTextArea;
 import com.langram.utils.CommonController;
 import com.langram.utils.Settings;
 import com.langram.utils.User;
+import com.langram.utils.channels.Channel;
+import com.langram.utils.channels.ChannelRepository;
 import com.langram.utils.exchange.network.IPAddressValidator;
 import com.langram.utils.exchange.network.IncomingMessageListener;
 import com.langram.utils.exchange.network.MessageReceiverTask;
@@ -19,10 +21,9 @@ import com.langram.utils.messages.TextMessage;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import javafx.application.Platform;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextInputDialog;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
-import javafx.stage.StageStyle;
+import javafx.util.Pair;
 
 import java.io.IOException;
 import java.net.URL;
@@ -134,6 +135,7 @@ public class MainController extends CommonController implements javafx.fxml.Init
 
     private void getConnectedUsersListOnActiveChannelPeriodically() {
         final Runnable getConnectedUsersList = (() -> {
+            /*
             if (!User.getInstance().getActiveChannel().equals("none")) {
                 Platform.runLater(() -> {
                             ArrayList<String> connectedUsers = NetworkControllerAction.getInstance().getConnectedUsersToAChannel(User.getInstance().getActiveChannel());
@@ -142,33 +144,46 @@ public class MainController extends CommonController implements javafx.fxml.Init
                         }
                 );
             }
+            */
         });
 
         scheduler.scheduleAtFixedRate(getConnectedUsersList, 2*60, 2*60, SECONDS);
     }
 
     public void addProjectChannel() {
-        TextInputDialog dialog = new TextInputDialog("");
-        dialog.initStyle(StageStyle.UNDECORATED);
-        dialog.setTitle(Settings.getInstance().getAppName());
-        dialog.setHeaderText(CommonController.getGlobalMessagesBundle().getString("addProjectPrompt"));
+        // Generate dialog box
+        MainView.AddChannelDialog dialog = new MainView.AddChannelDialog();
 
-        Optional<String> result = dialog.showAndWait();
-        String entered = "none";
-        if (result.isPresent()) {
-            entered = result.get();
-        }
-        IPAddressValidator ipAddressValidator = new IPAddressValidator();
-        if (ipAddressValidator.validate(entered)) {
-            projectsList.getItems().add(entered);
-            threadsPool.submit(new MessageReceiverTask(MULTICAST, entered, MULTICAST_PORT_LISTENER, new onReceivedMessage()).get());
-            User.getInstance().addAnActiveChannel(entered);
-        }
+        // Request focus on the username field by default.
+        Platform.runLater(() -> dialog.getNameField().requestFocus());
+
+        // Convert the result to a username-password-pair when the login button is clicked.
+        dialog.get().setResultConverter(dialogButton -> {
+            if (dialogButton == dialog.getAddButton()) {
+                return new Pair<>(dialog.getNameField().getText(), dialog.getIpField().getText());
+            }
+            return null;
+        });
+
+        Optional<Pair<String, String>> result = dialog.get().showAndWait();
+
+        result.ifPresent(pair -> {
+            IPAddressValidator ipAddressValidator = new IPAddressValidator();
+            if (ipAddressValidator.validate(pair.getValue()) && !ChannelRepository.getInstance().channelExists(pair.getValue())) {
+                projectsList.getItems().add(pair.getKey());
+                ChannelRepository.getInstance().store(new Channel(pair.getKey(), pair.getValue()));
+                threadsPool.submit(new MessageReceiverTask(MULTICAST, pair.getValue(), MULTICAST_PORT_LISTENER, new onReceivedMessage()).get());
+
+            }
+        });
+
     }
 
     public void goToChannel() {
-        String ipAddress = projectsList.getSelectionModel().getSelectedItems().get(0);
-        if (ipAddress != null) {
+        String selectedChannel = projectsList.getSelectionModel().getSelectedItems().get(0);
+        String ipAddress = ChannelRepository.getInstance().getChannelIP(selectedChannel);
+
+        if (!ipAddress.equals("none")) {
             Platform.runLater(
                     () -> {
                         // Get connected users on channel
@@ -178,7 +193,7 @@ public class MainController extends CommonController implements javafx.fxml.Init
                     }
             );
 
-            User.getInstance().setActiveChannel(ipAddress);
+            ChannelRepository.getInstance().switchToChannel(selectedChannel);
 
             // Set prompt message
             currentChannel = ipAddress;

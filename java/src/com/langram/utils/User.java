@@ -21,17 +21,4 @@ public class User {
         return 3;
     }
 
-    public void addAnActiveChannel(String ipAddress) {
-        activeChannelsList.add(ipAddress);
-    }
-
-    public boolean isConnectedToChannel(String ipAddress) {
-        return activeChannelsList.contains(ipAddress);
-    }
-
-    public String getActiveChannel() { return currentChannel; }
-
-    public void setActiveChannel(String ipAddress) {
-        this.currentChannel = ipAddress;
-    }
 }

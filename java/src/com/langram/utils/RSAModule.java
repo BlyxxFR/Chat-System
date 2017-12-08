@@ -106,7 +106,7 @@ public class RSAModule {
 
     public void generateDigitalSignature() {
         try {
-            String signFile = signPath + Hash(this.getPublicKey().toString());
+            String signFile = signPath + Hash.get(this.getPublicKey().toString());
             if (Files.notExists(Paths.get(signFile))) {
                 Signature sign = Signature.getInstance("SHA256withRSA");
                 sign.initSign(this.getPrivateKey());
@@ -157,7 +157,7 @@ public class RSAModule {
                 if (in != null) in.close();
             }
 
-            String signName = Hash(pub.toString());
+            String signName = Hash.get(pub.toString());
             Path path = Paths.get(signPath + signName);
             if (Files.notExists(path))
                 throw (new MissingDigitalSignature());
@@ -169,20 +169,6 @@ public class RSAModule {
             return false;
         }
 
-    }
-
-    private String Hash(String input) throws NoSuchAlgorithmException, UnsupportedEncodingException {
-        MessageDigest md = MessageDigest.getInstance("SHA-256");
-        md.reset();
-        byte[] buffer = input.getBytes("UTF-8");
-        md.update(buffer);
-        byte[] digest = md.digest();
-
-        StringBuilder hexStr = new StringBuilder();
-        for (byte aDigest : digest) {
-            hexStr.append(Integer.toString((aDigest & 0xff) + 0x100, 16).substring(1));
-        }
-        return hexStr.toString();
     }
 
     private class MissingDigitalSignature extends Exception {
