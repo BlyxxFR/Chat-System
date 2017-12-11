@@ -18,10 +18,11 @@ public abstract class Message implements Serializable
     String senderName;
     Channel channel;
 
-    Message(MessageType t)
+    Message(MessageType t, Channel c)
     {
         this.date = new Date();
         this.messageType = t;
+        this.channel = c;
     }
 
     public String toString()
@@ -36,4 +37,5 @@ public abstract class Message implements Serializable
     public String getSenderName() { return senderName; }
     public String getText() { return ""; }
     public MessageType getMessageType() { return messageType; }
+    public Channel getChannel() { return channel; };
 }

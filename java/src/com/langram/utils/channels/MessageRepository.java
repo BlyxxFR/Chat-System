@@ -10,7 +10,6 @@ import javax.xml.soap.Text;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Objects;
-import java.util.UUID;
 
 /**
  * This file is part of the project java.
@@ -44,7 +43,7 @@ public class MessageRepository implements RepositoryInterface<Message>
 
 	private void storeTextMessage(TextMessage message)
 	{
-		String sql = "INSERT INTO message(messageType, message_date, senderName, content) VALUES(?, ?, ?, ?)";
+		String sql = "INSERT INTO message(messageType, message_date, senderName, content, channelID) VALUES(?, ?, ?, ?, ?)";
 
 		try {
 			Connection conn = db.connect();
@@ -53,6 +52,7 @@ public class MessageRepository implements RepositoryInterface<Message>
 			pstmt.setString(2, message.getDate());
 			pstmt.setString(3, message.getSenderName());
 			pstmt.setString(4, message.getText());
+			pstmt.setString(5, ChannelRepository.getInstance().getChannelUUID(message.getChannel().getChannelName()).toString());
 			pstmt.execute();
 			pstmt.close();
 		} catch (SQLException e) {
@@ -69,15 +69,18 @@ public class MessageRepository implements RepositoryInterface<Message>
 	public ArrayList<Message> retrieveAll() {
 		ArrayList<Message> messagesList = new ArrayList<>();
 		try {
-			ResultSet rs = getResultSet("SELECT messageType, message_date, senderName, content FROM message");
+			ResultSet rs = getResultSet("SELECT messageType, message_date, senderName, content, channelID FROM message");
 			while (rs.next()) {
 				Message m = null;
+				String channelID  = rs.getString("channelID");
+				Channel c = ChannelRepository.getInstance().getChannelWithUUID(channelID);
 				if(Objects.equals(rs.getString("messageType"), Message.MessageType.TEXT_MESSAGE.toString()))
 				{
 					m = new TextMessage(
 							rs.getString("senderName"),
 							rs.getString("content"),
-							rs.getDate("message_date")
+							rs.getDate("message_date"),
+							c
 					);
 				}else if(Objects.equals(rs.getString("messageType"), Message.MessageType.FILE_MESSAGE.toString())){
 					m = new FileMessage(null);

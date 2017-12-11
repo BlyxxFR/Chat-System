@@ -61,11 +61,12 @@ public class DatabaseStore {
 				+ ");";
 
 		String sql2 = "CREATE TABLE IF NOT EXISTS message (\n"
-				+ " id INT PRIMARY KEY AUTO_INCREMENT, \n"
+				+ " id INTEGER PRIMARY KEY AUTOINCREMENT, \n"
 				+ " messageType VARCHAR(30) NOT NULL, \n"
 				+ " message_date DATETIME NOT NULL, \n"
-				+ " senderName VARCHAR(30) NOT NULL"
-				+ " content TEXT\n "
+				+ " senderName VARCHAR(30) NOT NULL, \n"
+				+ " content TEXT,\n "
+				+ " channelID String,\n"
 				+ ");";
 
 		try (Connection conn = this.connect()) {

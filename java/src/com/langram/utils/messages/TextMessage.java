@@ -1,21 +1,23 @@
 package com.langram.utils.messages;
 
+import com.langram.utils.channels.Channel;
+
 import java.util.Date;
 
 public class TextMessage extends Message
 {
     private String content;
 
-    public TextMessage(String senderName, String c)
+    public TextMessage(String senderName, String c, Channel ch)
     {
-        super(MessageType.TEXT_MESSAGE);
+        super(MessageType.TEXT_MESSAGE, ch);
         this.senderName = senderName;
         this.content = c;
     }
 
-    public TextMessage(String senderName, String c, Date d)
+    public TextMessage(String senderName, String c, Date d, Channel ch)
     {
-        super(MessageType.TEXT_MESSAGE);
+        super(MessageType.TEXT_MESSAGE, ch);
         this.senderName = senderName;
         this.content = c;
         this.date = d;
