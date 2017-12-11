@@ -1,5 +1,7 @@
 package com.langram.utils.messages;
 
+import com.langram.utils.channels.Channel;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -11,9 +13,10 @@ public abstract class Message implements Serializable
         CONTROL_MESSAGE
     }
 
-    private Date date;
+    protected Date date;
     private MessageType messageType;
     String senderName;
+    Channel channel;
 
     Message(MessageType t)
     {
@@ -27,10 +30,10 @@ public abstract class Message implements Serializable
         return "["+this.date+"] : Un message de type " + type + " a été reçu !";
     }
 
-    String getDate() {
+    public String getDate() {
         return date.toString();
     }
-    String getSenderName() { return senderName; }
-
-    String getText() { return ""; }
+    public String getSenderName() { return senderName; }
+    public String getText() { return ""; }
+    public MessageType getMessageType() { return messageType; }
 }

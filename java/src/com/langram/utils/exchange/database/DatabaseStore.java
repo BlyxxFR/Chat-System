@@ -60,11 +60,19 @@ public class DatabaseStore {
 				+ " active INTEGER\n"
 				+ ");";
 
+		String sql2 = "CREATE TABLE IF NOT EXISTS message (\n"
+				+ " id INT PRIMARY KEY AUTO_INCREMENT, \n"
+				+ " messageType VARCHAR(30) NOT NULL, \n"
+				+ " message_date DATETIME NOT NULL, \n"
+				+ " senderName VARCHAR(30) NOT NULL"
+				+ " content TEXT\n "
+				+ ");";
+
 		try (Connection conn = this.connect()) {
 			if (conn != null) {
-				DatabaseMetaData meta = conn.getMetaData();
 				Statement stmt = conn.createStatement();
 				stmt.execute(sql);
+				stmt.execute(sql2);
 
 				conn.close();
 			}
