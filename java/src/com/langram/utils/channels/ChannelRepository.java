@@ -57,9 +57,17 @@ public class ChannelRepository implements RepositoryInterface<Channel> {
         return stmt.executeQuery(sql);
     }
 
+    private ResultSet getResultSet(String sql, String[] args) throws SQLException {
+        PreparedStatement pstmt = db.connect().prepareStatement(sql);
+        for(int i = 1; i <= args.length; i++) {
+            pstmt.setString(i, args[i-1]);
+        }
+        return pstmt.executeQuery();
+    }
+
     public boolean isConnectedToChannel(String ipAddress) {
         try {
-            ResultSet rs = getResultSet("SELECT id FROM channel WHERE ipAddress = '" + ipAddress + "'");
+            ResultSet rs = getResultSet("SELECT id FROM channel WHERE ipAddress = ?", new String[]{ ipAddress });
             boolean result = rs.isBeforeFirst();
             rs.close();
             return result;
@@ -73,7 +81,7 @@ public class ChannelRepository implements RepositoryInterface<Channel> {
 
     public String getChannelIP(String channelName) {
         try {
-            ResultSet rs = getResultSet("SELECT ipAddress FROM channel WHERE channelName = '" + channelName + "'");
+            ResultSet rs = getResultSet("SELECT ipAddress FROM channel WHERE channelName = ?", new String[]{channelName});
             if(rs.isBeforeFirst()) {
                 rs.next();
                 String ipAddress = rs.getString("ipAddress");
@@ -94,8 +102,8 @@ public class ChannelRepository implements RepositoryInterface<Channel> {
             PreparedStatement pstmt = db.connect().prepareStatement("UPDATE channel SET active = 1 WHERE channelName = ?");
             pstmt.setString(1, channelName);
             pstmt.execute();
-            stmt.close();
-            ResultSet rs = getResultSet("SELECT ipAddress FROM channel WHERE channelName = '" + channelName + "'");
+            pstmt.close();
+            ResultSet rs = getResultSet("SELECT ipAddress FROM channel WHERE channelName = ?", new String[]{channelName });
             rs.next();
             this.currentChannel = new Channel(channelName, rs.getString("ipAddress"));
             rs.close();
@@ -109,8 +117,8 @@ public class ChannelRepository implements RepositoryInterface<Channel> {
     }
 
 
-    public boolean isActiveChannel(String channelName) {
-        return false;
+    public boolean isActiveChannel(String ipAddress) {
+        return currentChannel != null && this.currentChannel.getIpAddress().equals(ipAddress);
     }
 
     public Channel getCurrentChannel() {
@@ -127,5 +135,20 @@ public class ChannelRepository implements RepositoryInterface<Channel> {
             }
         }
         return this.currentChannel;
+    }
+
+    public UUID getChannelUUID(String channelName) {
+        UUID id = null;
+        try {
+            ResultSet rs = getResultSet("SELECT id FROM channel WHERE channelName = ?", new String[]{channelName});
+            if(rs.isBeforeFirst()) {
+                rs.next();
+                id = UUID.fromString(rs.getString("id"));
+            }
+            rs.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return id;
     }
 }

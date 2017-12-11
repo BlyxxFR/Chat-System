@@ -56,6 +56,7 @@ public class MainController extends CommonController implements javafx.fxml.Init
     private ResourceBundle mainMessages;
 
     private static MainController instance;
+    private ArrayList<String> listeningChannels = new ArrayList<>();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -140,16 +141,16 @@ public class MainController extends CommonController implements javafx.fxml.Init
 
     private void getConnectedUsersListOnActiveChannelPeriodically() {
         final Runnable getConnectedUsersList = (() -> {
-            /*
-            if (!User.getInstance().getActiveChannel().equals("none")) {
+
+            if (ChannelRepository.getInstance().getCurrentChannel() != null) {
                 Platform.runLater(() -> {
-                            ArrayList<String> connectedUsers = NetworkControllerAction.getInstance().getConnectedUsersToAChannel(User.getInstance().getActiveChannel());
+                            ArrayList<String> connectedUsers = NetworkControllerAction.getInstance().getConnectedUsersToAChannel(ChannelRepository.getInstance().getCurrentChannel().getIpAddress());
                             connectedUsersList.getItems().clear();
                             connectedUsersList.getItems().addAll(connectedUsers);
                         }
                 );
             }
-            */
+
         });
 
         scheduler.scheduleAtFixedRate(getConnectedUsersList, 2*60, 2*60, SECONDS);
@@ -177,8 +178,6 @@ public class MainController extends CommonController implements javafx.fxml.Init
             if (ipAddressValidator.validate(pair.getValue()) && !ChannelRepository.getInstance().isConnectedToChannel(pair.getValue())) {
                 projectsList.getItems().add(pair.getKey());
                 ChannelRepository.getInstance().store(new Channel(pair.getKey(), pair.getValue()));
-                threadsPool.submit(new MessageReceiverTask(MULTICAST, pair.getValue(), MULTICAST_PORT_LISTENER, new onReceivedMessage()).get());
-
             }
         });
         projectsList.getItems().sort(String::compareToIgnoreCase);
@@ -202,6 +201,10 @@ public class MainController extends CommonController implements javafx.fxml.Init
             );
 
             ChannelRepository.getInstance().switchToChannel(selectedChannel);
+            if(!listeningChannels.contains(selectedChannel)) {
+                threadsPool.submit(new MessageReceiverTask(MULTICAST, ChannelRepository.getInstance().getCurrentChannel().getIpAddress(), MULTICAST_PORT_LISTENER, new onReceivedMessage()).get());
+                listeningChannels.add(selectedChannel);
+            }
 
             // Set prompt message
             sendingArea.setDisable(false);
