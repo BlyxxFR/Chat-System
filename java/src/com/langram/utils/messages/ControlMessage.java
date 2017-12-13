@@ -10,7 +10,7 @@ public class ControlMessage extends Message {
 
     public ControlMessage(NetworkControllerMessageType type, String content)
     {
-        super(MessageType.CONTROL_MESSAGE);
+        super(MessageType.CONTROL_MESSAGE, null);
         this.senderName = (User.getInstance() != null) ? User.getInstance().getUsername() : "CONTROL";
         this.type = type;
         this.content = content;

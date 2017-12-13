@@ -8,7 +8,7 @@ public class FileMessage extends Message
 
     public FileMessage(File f)
     {
-        super(MessageType.FILE_MESSAGE);
+        super(MessageType.FILE_MESSAGE, null); // TODO adapt it
         this.content = f;
     }
 

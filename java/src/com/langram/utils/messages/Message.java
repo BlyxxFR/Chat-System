@@ -37,5 +37,6 @@ public abstract class Message implements Serializable
     public String getSenderName() { return senderName; }
     public String getText() { return ""; }
     public MessageType getMessageType() { return messageType; }
-    public Channel getChannel() { return channel; };
+    public Channel getChannel() { return channel; }
+    public void updateChannel(Channel c) { this.channel = c; }
 }

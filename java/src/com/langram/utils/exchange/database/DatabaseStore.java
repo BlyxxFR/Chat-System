@@ -66,7 +66,7 @@ public class DatabaseStore {
 				+ " message_date DATETIME NOT NULL, \n"
 				+ " senderName VARCHAR(30) NOT NULL, \n"
 				+ " content TEXT,\n "
-				+ " channelID String,\n"
+				+ " channelID String\n"
 				+ ");";
 
 		try (Connection conn = this.connect()) {

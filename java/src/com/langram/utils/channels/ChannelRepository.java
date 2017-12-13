@@ -54,8 +54,24 @@ public class ChannelRepository implements RepositoryInterface<Channel> {
     public Channel getChannelWithUUID(String id) {
         Channel channel = null;
         try {
-            ResultSet rs = getResultSet("SELECT channelName, ipAddress, active FROM channel WHERE id = "+id+";");
+            ResultSet rs = getResultSet("SELECT channelName, ipAddress, active FROM channel WHERE id = ?", new String[]{ id });
 
+            if(rs.next())
+            {
+                channel = new Channel(rs.getString("channelName"), rs.getString("ipAddress"));
+            }
+
+            rs.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return channel;
+    }
+
+    public Channel getChannelWithIP(String ip) {
+        Channel channel = null;
+        try {
+            ResultSet rs = getResultSet("SELECT channelName, ipAddress, active FROM channel WHERE ipAddress = ?", new String[]{ ip });
             if(rs.next())
             {
                 channel = new Channel(rs.getString("channelName"), rs.getString("ipAddress"));

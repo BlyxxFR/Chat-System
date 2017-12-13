@@ -7,6 +7,7 @@ import com.langram.utils.Settings;
 import com.langram.utils.User;
 import com.langram.utils.channels.Channel;
 import com.langram.utils.channels.ChannelRepository;
+import com.langram.utils.channels.MessageRepository;
 import com.langram.utils.exchange.network.IPAddressValidator;
 import com.langram.utils.exchange.network.IncomingMessageListener;
 import com.langram.utils.exchange.network.MessageReceiverTask;
@@ -111,9 +112,16 @@ public class MainController extends CommonController implements javafx.fxml.Init
         public void onNewIncomingMessage(final Message message, String senderAddress, int senderPort) {
             Platform.runLater(
                     () -> {
+
                         if (message instanceof TextMessage || message instanceof FileMessage) {
-                            messagesList.getItems().add(message);
-                            messagesList.scrollTo(message);
+                            Channel msgChannel = ChannelRepository.getInstance().getChannelWithIP(message.getChannel().getIpAddress());
+                            message.updateChannel(msgChannel);
+                            MessageRepository.getInstance().store(message);
+                            if(ChannelRepository.getInstance().isActiveChannel(message.getChannel().getIpAddress()))
+                            {
+                                messagesList.getItems().add(message);
+                                messagesList.scrollTo(message);
+                            }
                         }
                     }
             );
@@ -191,6 +199,9 @@ public class MainController extends CommonController implements javafx.fxml.Init
         String ipAddress = ChannelRepository.getInstance().getChannelIP(selectedChannel);
 
         if (!ipAddress.equals("none")) {
+
+            messagesList.getItems().clear();
+
             Platform.runLater(
                     () -> {
                         // Get connected users on channel
@@ -201,6 +212,9 @@ public class MainController extends CommonController implements javafx.fxml.Init
             );
 
             ChannelRepository.getInstance().switchToChannel(selectedChannel);
+            ArrayList<Message> messages = MessageRepository.getInstance().retrieveMessageFromChannel(ChannelRepository.getInstance().getChannelUUID(selectedChannel).toString());
+            messagesList.getItems().addAll(messages);
+
             if(!listeningChannels.contains(selectedChannel)) {
                 threadsPool.submit(new MessageReceiverTask(MULTICAST, ChannelRepository.getInstance().getCurrentChannel().getIpAddress(), MULTICAST_PORT_LISTENER, new onReceivedMessage()).get());
                 listeningChannels.add(selectedChannel);
@@ -218,7 +232,7 @@ public class MainController extends CommonController implements javafx.fxml.Init
 
     public void sendMessage() {
         if (!textMessage.getText().isEmpty()) {
-            Message message = new TextMessage(User.getInstance().getUsername(), textMessage.getText());
+            Message message = new TextMessage(User.getInstance().getUsername(), textMessage.getText(), ChannelRepository.getInstance().getCurrentChannel());
             MessageSenderService messageSender = new MessageSenderService();
             try {
                 messageSender.sendMessageOn(ChannelRepository.getInstance().getCurrentChannel().getIpAddress(), MULTICAST_PORT_LISTENER, MessageSenderService.SendingMode.MULTICAST, message);
