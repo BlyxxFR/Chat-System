@@ -35,6 +35,14 @@ public class NetworkControllerAction {
         return parseUsersFromReplies(NetworkController.getInstance().sendAndGetReplies(BROADCAST_IP, message));
     }
 
+    public String getIpAndPortToDiscussWithAnUser(String username) throws UtilisateurHorsLigne {
+        ArrayList<ControlMessage>replies = NetworkController.getInstance().sendAndGetReplies(BROADCAST_IP, message);
+        if(replies.size() > 0) {
+            return replies.get(0);
+        }
+        throw new UtilisateurHorsLigne;
+    }
+
     private ArrayList<String> parseUsersFromReplies(ArrayList<ControlMessage> replies) {
         ArrayList<String> connectedUsers = new ArrayList<>();
         for (ControlMessage m : replies) {

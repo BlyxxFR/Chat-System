@@ -6,6 +6,8 @@ public enum NetworkControllerMessageType {
     GetConnectedUsersToAChannel,
     GetConnectedUsersToAChannelReply,
     NotifyConnectionToChannel,
-    AcknowledgeNewConnection
+    AcknowledgeNewConnection,
+    AskIPForUnicastMessage,
+    ReplyIPForUnicastMessage
 }
 
