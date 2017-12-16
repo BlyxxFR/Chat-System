@@ -141,8 +141,11 @@ public class MainController extends CommonController implements javafx.fxml.Init
     public void addAnUserToActiveChannelConnectedUsersList(final String username) {
         Platform.runLater(
                 () -> {
-                    connectedUsersList.getItems().add(username);
-                    connectedUsersList.getItems().sort(String::compareToIgnoreCase);
+                    if(!connectedUsersList.getItems().contains(username))
+                    {
+                        connectedUsersList.getItems().add(username);
+                        connectedUsersList.getItems().sort(String::compareToIgnoreCase);
+                    }
                 }
         );
     }
