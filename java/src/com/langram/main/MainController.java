@@ -21,14 +21,17 @@ import com.langram.utils.messages.MessageDisplay;
 import com.langram.utils.messages.TextMessage;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import javafx.application.Platform;
+import javafx.event.EventHandler;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.util.Pair;
 
 import java.io.IOException;
-import java.net.URL;
+import java.net.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
@@ -58,6 +61,10 @@ public class MainController extends CommonController implements javafx.fxml.Init
 
     private static MainController instance;
     private ArrayList<String> listeningChannels = new ArrayList<>();
+    private HashMap<String, Integer> listeningPrivateChannels = new HashMap<>();
+
+
+    private HashMap<String, Pair<String, Integer>> privateConversations = new HashMap<>();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -132,7 +139,35 @@ public class MainController extends CommonController implements javafx.fxml.Init
         public void onNewIncomingMessage(final Message message, String senderAddress, int senderPort) {
             Platform.runLater(
                     () -> {
+                        System.out.println("Something has been received !");
+                        System.out.println(message.toString());
+                        if(message.getMessageType() == Message.MessageType.TEXT_MESSAGE)
+                        {
+                            TextMessage m = (TextMessage) message;
+                            System.out.println("Message : "+m.getText());
+                            System.out.println("IP: "+ senderAddress);
+                            System.out.println("Port: " +senderPort);
+                            System.out.println("Sender Name: "+m.getSenderName());
 
+                            // channel exists ?
+                            String cIP = ChannelRepository.getInstance().getChannelIP(m.getSenderName());
+                            Channel c;
+
+                            if(cIP != null && cIP.equals(senderAddress))
+                            {
+                                System.out.println("Channel already exists");
+                                c = ChannelRepository.getInstance().getChannelWithIP(cIP);
+                            }
+                            else
+                            {
+                                System.out.println("Creating a new channel");
+                                c = new Channel(m.getSenderName(), senderAddress);
+                            }
+
+                            ChannelRepository.getInstance().store(c);
+                            m.updateChannel(c);
+                            MessageRepository.getInstance().store(m);
+                        }
                     }
             );
         }
@@ -199,6 +234,8 @@ public class MainController extends CommonController implements javafx.fxml.Init
     }
 
     private void goToChannel(String selectedChannel) {
+
+        this.sendMessage.setOnMouseClicked(event -> sendMessage());
         String ipAddress = ChannelRepository.getInstance().getChannelIP(selectedChannel);
 
         if (!ipAddress.equals("none")) {
@@ -230,7 +267,88 @@ public class MainController extends CommonController implements javafx.fxml.Init
         }
     }
 
-    public void goToPrivateMessages() {
+    public Pair<String, Integer> createListeningThread(String username) {
+        // Getting a free port
+        DatagramSocket socket;
+        try {
+            socket = new DatagramSocket();
+            String address = String.valueOf(InetAddress.getLocalHost());
+            int port = socket.getLocalPort();
+            socket.close();
+
+            if(listeningPrivateChannels.containsKey(username)) {
+                return new Pair<>(address, listeningPrivateChannels.get(username));
+            }
+
+            MessageReceiverTask messageReceiverTask = new MessageReceiverTask(MessageSenderService.SendingMode.UNICAST, "127.0.0.1", port, new onReceivedPrivateMessage());
+            threadsPool.submit(messageReceiverTask.get());
+            return new Pair<>(address, port);
+
+        } catch (SocketException | UnknownHostException e) {
+            e.printStackTrace();
+        }
+
+        return new Pair<>(null, null);
+    }
+
+    public void goToPrivateMessages()
+    {
+        String user = connectedUsersList.getSelectionModel().getSelectedItems().get(0);
+        this.sendMessage.setOnMouseClicked(event -> sendPrivateMessage(user));
+        System.out.println("Click on = "+user);
+
+        if(!this.privateConversations.containsKey(user))
+        {
+            try {
+                String ipPort = NetworkControllerAction.getInstance().getIpAndPortToDiscussWithAnUser(user);
+
+                String ip = ipPort.split("/")[1].split(":")[0];
+                String port = ipPort.split("/")[1].split(":")[1];
+
+                System.out.println(ipPort);
+                System.out.println(ip+" <=> "+port);
+
+                privateConversations.put(user, new Pair<>(ip, Integer.valueOf(port)));
+                Channel c = new Channel(user, ip);
+                ChannelRepository.getInstance().store(c);
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        this.messagesList.getItems().clear();
+
+        String ip = this.privateConversations.get(user).getKey();
+        Integer port = this.privateConversations.get(user).getValue();
+
+        // Recuperer les messages et afficher
+        ArrayList<Message> messages = MessageRepository.getInstance().retrieveMessageFromChannel(ChannelRepository.getInstance().getChannelWithIP(ip).toString());
+        messagesList.getItems().addAll(messages);
+    }
+
+    public void sendPrivateMessage(String user)
+    {
+        System.out.println("Sending private message to " + user);
+        String ip = this.privateConversations.get(user).getKey();
+        Integer port = this.privateConversations.get(user).getValue();
+        String text = textMessage.getText();
+        System.out.println("IP : "+ip+" -> "+ port + ": " + text);
+
+        if(!text.isEmpty())
+        {
+            Message message = new TextMessage(User.getInstance().getUsername(), text, ChannelRepository.getInstance().getChannelWithIP(ip));
+            MessageSenderService messageSender = new MessageSenderService();
+
+            try {
+                messageSender.sendMessageOn(ip, port, MessageSenderService.SendingMode.UNICAST, message);
+                System.out.println("Message Sent !");
+            } catch (UnsupportedSendingModeException | IOException e) {
+                e.printStackTrace();
+            }
+
+            this.textMessage.setText("");
+        }
     }
 
     public void sendMessage() {
