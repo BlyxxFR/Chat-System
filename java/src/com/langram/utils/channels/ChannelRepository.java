@@ -202,4 +202,16 @@ public class ChannelRepository implements RepositoryInterface<Channel> {
         }
         return id;
     }
+
+    public void updateChannelIP(String channelName, String senderAddress) {
+        try {
+            PreparedStatement pstmt = db.connect().prepareStatement("UPDATE channel SET ipAddress = ? WHERE channelName = ?");
+            pstmt.setString(1, senderAddress);
+            pstmt.setString(2, channelName);
+            pstmt.execute();
+            pstmt.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }

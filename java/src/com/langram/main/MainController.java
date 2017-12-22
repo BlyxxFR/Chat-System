@@ -110,11 +110,10 @@ public class MainController extends CommonController implements javafx.fxml.Init
         public void onNewIncomingMessage(final Message message, String senderAddress, int senderPort) {
             Platform.runLater(
                     () -> {
-
                         if (message instanceof TextMessage || message instanceof FileMessage) {
                             Channel msgChannel = ChannelRepository.getInstance().getChannelWithIP(message.getChannel().getIpAddress());
                             message.updateChannel(msgChannel);
-                            MessageRepository.getInstance().store(message);
+                            MessageRepository.getInstance().store(message, true);
                             if (ChannelRepository.getInstance().isActiveChannel(message.getChannel().getIpAddress())) {
                                 messagesList.getItems().add(message);
                                 messagesList.scrollTo(message);
@@ -282,6 +281,8 @@ public class MainController extends CommonController implements javafx.fxml.Init
                     String ip = ipPort.split("/")[1].split(":")[0];
                     String port = ipPort.split("/")[1].split(":")[1];
 
+                    ChannelRepository.getInstance().updateChannelIP(user, ip);
+
                     privateConversations.put(user, new Pair<>(ip, Integer.valueOf(port)));
                     Channel c = new Channel(user, ip);
                     ChannelRepository.getInstance().store(c, true);
@@ -311,8 +312,23 @@ public class MainController extends CommonController implements javafx.fxml.Init
             MessageSenderService messageSender = new MessageSenderService();
 
             try {
-                messageSender.sendMessageOn(ip, port, MessageSenderService.SendingMode.UNICAST, message);
-            } catch (UnsupportedSendingModeException | IOException e) {
+                boolean sent = true;
+                if (!user.equals(User.getInstance().getUsername())) {
+                    try {
+                        if(NetworkControllerAction.getInstance().isAnUsernameAvailable(user)) {
+                            sent = false;
+                        } else {
+                            messageSender.sendMessageOn(ip, port, MessageSenderService.SendingMode.UNICAST, message);
+                        }
+                    } catch (Exception e) {
+                        sent = false;
+                    }
+                }
+                messagesList.getItems().add(message);
+                messagesList.scrollTo(message);
+                message.updateChannel(ChannelRepository.getInstance().getChannelWithName(user));
+                MessageRepository.getInstance().store(message, sent);
+            } catch (UnsupportedSendingModeException e) {
                 e.printStackTrace();
             }
 

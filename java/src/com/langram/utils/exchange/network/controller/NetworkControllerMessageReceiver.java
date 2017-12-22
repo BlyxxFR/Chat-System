@@ -4,15 +4,9 @@ import com.langram.main.MainController;
 import com.langram.utils.User;
 import com.langram.utils.channels.ChannelRepository;
 import com.langram.utils.exchange.network.IncomingMessageListener;
-import com.langram.utils.exchange.network.MessageReceiverTask;
-import com.langram.utils.exchange.network.MessageSenderService;
 import com.langram.utils.messages.ControlMessage;
 import com.langram.utils.messages.Message;
 import javafx.util.Pair;
-
-import java.net.DatagramSocket;
-import java.net.SocketException;
-import java.net.UnknownHostException;
 
 import static com.langram.utils.exchange.network.controller.NetworkControllerMessageType.*;
 
@@ -24,7 +18,6 @@ class NetworkControllerMessageReceiver {
             ControlMessage response;
             switch (controlMessage.getControlType()) {
                 case CheckForUniqueUsername:
-                    // TODO : Check if it's a known user instead of just current one
                     response = new ControlMessage(CheckForUniqueUsernameReply, (User.getInstance().getUsername().equals(controlMessage.getContent()) ? "KO" : "OK"));
                     NetworkController.getInstance().reply(senderAddress, response);
                     break;
@@ -48,6 +41,7 @@ class NetworkControllerMessageReceiver {
                         Pair<String, Integer> data = MainController.getInstance().createListeningThread(username);
                         response = new ControlMessage(ReplyIPForUnicastMessage, data.getKey() + ":" + data.getValue());
                         NetworkController.getInstance().reply(senderAddress, response);
+                        ChannelRepository.getInstance().updateChannelIP(controlMessage.getContent(), senderAddress);
                     }
                 default:
                     break;

@@ -20,7 +20,6 @@ public class MessageSenderService {
     }
 
     public final static int CONTROL_PORT_LISTENER = 7655;
-    public final static int UNICAST_PORT_LISTENER = 5606;
     public final static int MULTICAST_PORT_LISTENER = 4488;
     private final static int TIMEOUT = 1000;
 
@@ -62,7 +61,7 @@ public class MessageSenderService {
     private ArrayList<ControlMessage> getReplies() throws IOException {
         ArrayList<ControlMessage> repliesList = new ArrayList<>();
         UDPSocket socket = new UDPSocket(CONTROL_PORT_LISTENER);
-        socket.setTimeout(100);
+        socket.setTimeout(50);
 
         int MAX_CONSECUTIVE_TIMEOUT_ALLOWED = 3;
         int currentConsecutiveTimeout = 0;
