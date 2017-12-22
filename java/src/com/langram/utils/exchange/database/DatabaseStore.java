@@ -3,7 +3,10 @@ package com.langram.utils.exchange.database;
 import com.langram.utils.Settings;
 
 import java.io.File;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 /**
  * This file is part of the project java.
@@ -14,7 +17,7 @@ import java.sql.*;
  * @since 1.0
  */
 public class DatabaseStore {
-	public static final String JDBC_SQLITE = "jdbc:sqlite:";
+	private static final String JDBC_SQLITE = "jdbc:sqlite:";
 	private static DatabaseStore databaseStore;
 	private final String db_path;
 
@@ -57,7 +60,8 @@ public class DatabaseStore {
 				+ "	id VARCHAR PRIMARY KEY,\n"
 				+ "	channelName TEXT NOT NULL,\n"
 				+ "	ipAddress VARCHAR(15),\n"
-				+ " active INTEGER\n"
+				+ " active INTEGER,\n"
+				+ " isPrivate INTEGER\n"
 				+ ");";
 
 		String sql2 = "CREATE TABLE IF NOT EXISTS message (\n"
@@ -66,7 +70,8 @@ public class DatabaseStore {
 				+ " message_date DATETIME NOT NULL, \n"
 				+ " senderName VARCHAR(30) NOT NULL, \n"
 				+ " content TEXT,\n "
-				+ " channelID String\n"
+				+ " channelID String,\n"
+                + " sent INTEGER\n"
 				+ ");";
 
 		try (Connection conn = this.connect()) {
