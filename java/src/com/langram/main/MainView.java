@@ -2,12 +2,12 @@ package com.langram.main;
 
 import com.langram.utils.Settings;
 import javafx.geometry.Insets;
-import javafx.scene.control.ButtonBar;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.Dialog;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
+import javafx.stage.StageStyle;
 import javafx.util.Pair;
+
+import java.util.ResourceBundle;
 
 class MainView {
 
@@ -18,28 +18,33 @@ class MainView {
         private ButtonType cancelButtonType;
         ButtonType addButtonType;
 
+        ResourceBundle mainMessages = ResourceBundle.getBundle("MainMessagesBundle", Settings.getInstance().getLocale());
+
         AddChannelDialog() {
             Dialog<Pair<String, String>> dialog = new Dialog<>();
+            dialog.initStyle(StageStyle.UNDECORATED);
             dialog.setTitle(Settings.getInstance().getAppName());
 
             // Set the button types.
-            cancelButtonType = new ButtonType("Annuler", ButtonBar.ButtonData.CANCEL_CLOSE);
-            addButtonType = new ButtonType("OK", ButtonBar.ButtonData.OK_DONE);
+            cancelButtonType = new ButtonType(mainMessages.getString("cancel"), ButtonBar.ButtonData.CANCEL_CLOSE);
+            addButtonType = new ButtonType(mainMessages.getString("submit"), ButtonBar.ButtonData.OK_DONE);
             dialog.getDialogPane().getButtonTypes().addAll(cancelButtonType, addButtonType);
 
             GridPane gridPane = new GridPane();
             gridPane.setHgap(10);
             gridPane.setVgap(10);
-            gridPane.setPadding(new Insets(20, 150, 10, 10));
-
+            gridPane.setPadding(new Insets(10, 10, 10, 10));
 
             nameChannel = new TextField();
-            nameChannel.setPromptText("Nom");
+            nameChannel.setPromptText(mainMessages.getString("channel_name"));
             ipChannel = new TextField();
-            ipChannel.setPromptText("IP");
+            ipChannel.setPromptText(mainMessages.getString("channel_address"));
 
-            gridPane.add(nameChannel, 0, 0);
-            gridPane.add(ipChannel, 2, 0);
+            gridPane.add(new Label(mainMessages.getString("channel_name")), 0, 0);
+            gridPane.add(new Label(mainMessages.getString("channel_address")), 0, 1);
+
+            gridPane.add(nameChannel, 1, 0);
+            gridPane.add(ipChannel, 1, 1);
             dialog.getDialogPane().setContent(gridPane);
             this.dialog = dialog;
         }

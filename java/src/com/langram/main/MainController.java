@@ -50,8 +50,6 @@ public class MainController extends CommonController implements javafx.fxml.Init
     public Label onlineLabel;
     public Label channelName;
     public FontAwesomeIconView addProjectChannelIcon;
-    public Label privateMessageLabel;
-    public FontAwesomeIconView privateMessagesEnvelope;
     public AnchorPane sendingArea;
     public JFXListView<String> connectedUsersList;
 
@@ -60,7 +58,6 @@ public class MainController extends CommonController implements javafx.fxml.Init
     private static MainController instance;
     private ArrayList<String> listeningChannels = new ArrayList<>();
     private HashMap<String, Integer> listeningPrivateChannels = new HashMap<>();
-
 
     private HashMap<String, Pair<String, Integer>> privateConversations = new HashMap<>();
 
@@ -76,11 +73,6 @@ public class MainController extends CommonController implements javafx.fxml.Init
         projectsLabel.setText(mainMessages.getString("projects"));
         onlineLabel.setText(mainMessages.getString("online"));
         displayUsername.setText(User.getInstance().getUsername());
-
-        // Set private message label
-        int privateMessageCounter = User.getInstance().getPrivateMessageCount();
-        privateMessageLabel.setText(String.format(mainMessages.getString(privateMessageCounter > 1 ? "new_message_plural" : "new_message"), privateMessageCounter));
-        privateMessagesEnvelope.setGlyphName(privateMessageCounter > 0 ? "ENVELOPE_ALT" : "ENVELOPE_OPEN_ALT");
 
         // Set messages' list css
         String css = this.getClass().getResource("/com/langram/utils/resources/messages.css").toExternalForm();
@@ -100,13 +92,13 @@ public class MainController extends CommonController implements javafx.fxml.Init
 
         // Load project list
         ArrayList<Channel> channelsList = ChannelRepository.getInstance().retrieveAll();
-        for(Channel channel : channelsList) {
+        for (Channel channel : channelsList) {
             projectsList.getItems().add(channel.getChannelName());
         }
         projectsList.getItems().sort(String::compareToIgnoreCase);
         Channel currentChannel = ChannelRepository.getInstance().getCurrentChannel();
 
-        if(currentChannel != null)
+        if (currentChannel != null)
             this.goToChannel(currentChannel.getChannelName());
     }
 
@@ -123,8 +115,7 @@ public class MainController extends CommonController implements javafx.fxml.Init
                             Channel msgChannel = ChannelRepository.getInstance().getChannelWithIP(message.getChannel().getIpAddress());
                             message.updateChannel(msgChannel);
                             MessageRepository.getInstance().store(message);
-                            if(ChannelRepository.getInstance().isActiveChannel(message.getChannel().getIpAddress()))
-                            {
+                            if (ChannelRepository.getInstance().isActiveChannel(message.getChannel().getIpAddress())) {
                                 messagesList.getItems().add(message);
                                 messagesList.scrollTo(message);
                             }
@@ -135,30 +126,26 @@ public class MainController extends CommonController implements javafx.fxml.Init
     }
 
     public class onReceivedPrivateMessage implements IncomingMessageListener {
-        public void onNewIncomingMessage(final Message message, String senderAddress, int senderPort) {
+        public void onNewIncomingMessage(final Message incommingMessage, String senderAddress, int senderPort) {
             Platform.runLater(
                     () -> {
-                        if(message.getMessageType() == Message.MessageType.TEXT_MESSAGE)
-                        {
-                            TextMessage m = (TextMessage) message;
-                            String cIP = ChannelRepository.getInstance().getChannelIP(m.getSenderName());
-                            Channel c;
+                        if (incommingMessage.getMessageType() == Message.MessageType.TEXT_MESSAGE) {
+                            TextMessage message = (TextMessage) incommingMessage;
+                            String channelIP = ChannelRepository.getInstance().getChannelIP(message.getSenderName());
+                            Channel channel;
 
-                            if(cIP != null && cIP.equals(senderAddress))
-                            {
-                                c = ChannelRepository.getInstance().getChannelWithIP(cIP);
-                            }
-                            else
-                            {
-                                c = new Channel(m.getSenderName(), senderAddress);
-                                ChannelRepository.getInstance().store(c, true);
+                            if (channelIP != null && channelIP.equals(senderAddress)) {
+                                channel = ChannelRepository.getInstance().getChannelWithIP(channelIP);
+                            } else {
+                                channel = new Channel(message.getSenderName(), senderAddress);
+                                ChannelRepository.getInstance().store(channel, true);
                             }
 
-                            m.updateChannel(c);
-                            MessageRepository.getInstance().store(m, true);
+                            message.updateChannel(channel);
+                            MessageRepository.getInstance().store(message, true);
 
-                            messagesList.getItems().add(m);
-                            messagesList.scrollTo(m);
+                            messagesList.getItems().add(message);
+                            messagesList.scrollTo(message);
                         }
                     }
             );
@@ -168,8 +155,7 @@ public class MainController extends CommonController implements javafx.fxml.Init
     public void addAnUserToActiveChannelConnectedUsersList(final String username) {
         Platform.runLater(
                 () -> {
-                    if(!connectedUsersList.getItems().contains(username))
-                    {
+                    if (!connectedUsersList.getItems().contains(username)) {
                         connectedUsersList.getItems().add(username);
                         connectedUsersList.getItems().sort(String::compareToIgnoreCase);
                     }
@@ -191,7 +177,7 @@ public class MainController extends CommonController implements javafx.fxml.Init
 
         });
 
-        scheduler.scheduleAtFixedRate(getConnectedUsersList, 2*60, 2*60, SECONDS);
+        scheduler.scheduleAtFixedRate(getConnectedUsersList, 2 * 60, 2 * 60, SECONDS);
     }
 
     public void addProjectChannel() {
@@ -222,7 +208,7 @@ public class MainController extends CommonController implements javafx.fxml.Init
     }
 
     public void goToChannel() {
-        if(projectsList.getSelectionModel().getSelectedItems().size() > 0)
+        if (projectsList.getSelectionModel().getSelectedItems().size() > 0)
             this.goToChannel(projectsList.getSelectionModel().getSelectedItems().get(0));
     }
 
@@ -248,7 +234,7 @@ public class MainController extends CommonController implements javafx.fxml.Init
             ArrayList<Message> messages = MessageRepository.getInstance().retrieveMessagesFromChannel(ChannelRepository.getInstance().getChannelUUID(selectedChannel));
             messagesList.getItems().addAll(messages);
 
-            if(!listeningChannels.contains(selectedChannel)) {
+            if (!listeningChannels.contains(selectedChannel)) {
                 threadsPool.submit(new MessageReceiverTask(MULTICAST, ChannelRepository.getInstance().getCurrentChannel().getIpAddress(), MULTICAST_PORT_LISTENER, new onReceivedMessage()).get());
                 listeningChannels.add(selectedChannel);
             }
@@ -269,7 +255,7 @@ public class MainController extends CommonController implements javafx.fxml.Init
             int port = socket.getLocalPort();
             socket.close();
 
-            if(listeningPrivateChannels.containsKey(username)) {
+            if (listeningPrivateChannels.containsKey(username)) {
                 return new Pair<>(address, listeningPrivateChannels.get(username));
             }
 
@@ -284,15 +270,12 @@ public class MainController extends CommonController implements javafx.fxml.Init
         return new Pair<>(null, null);
     }
 
-    public void goToPrivateMessages()
-    {
-        if(connectedUsersList.getSelectionModel().getSelectedItems().size() > 0) {
+    public void goToPrivateMessages() {
+        if (connectedUsersList.getSelectionModel().getSelectedItems().size() > 0) {
             String user = connectedUsersList.getSelectionModel().getSelectedItems().get(0);
             this.sendMessage.setOnMouseClicked(event -> sendPrivateMessage(user));
 
-            if(!this.privateConversations.containsKey(user))
-            {
-                System.out.println("Chibre");
+            if (!this.privateConversations.containsKey(user)) {
                 try {
                     String ipPort = NetworkControllerAction.getInstance().getIpAndPortToDiscussWithAnUser(user);
 
@@ -302,7 +285,6 @@ public class MainController extends CommonController implements javafx.fxml.Init
                     privateConversations.put(user, new Pair<>(ip, Integer.valueOf(port)));
                     Channel c = new Channel(user, ip);
                     ChannelRepository.getInstance().store(c, true);
-                    System.out.println(c.getChannelName());
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -314,20 +296,17 @@ public class MainController extends CommonController implements javafx.fxml.Init
             channelName.setText(user);
 
             this.messagesList.getItems().clear();
-            System.out.println(ChannelRepository.getInstance().getChannelUUID(user));
             ArrayList<Message> messages = MessageRepository.getInstance().retrieveMessagesFromChannel(ChannelRepository.getInstance().getChannelUUID(user));
             messagesList.getItems().addAll(messages);
         }
     }
 
-    private void sendPrivateMessage(String user)
-    {
+    private void sendPrivateMessage(String user) {
         String ip = this.privateConversations.get(user).getKey();
         Integer port = this.privateConversations.get(user).getValue();
         String text = textMessage.getText();
 
-        if(!text.isEmpty())
-        {
+        if (!text.isEmpty()) {
             Message message = new TextMessage(User.getInstance().getUsername(), text, ChannelRepository.getInstance().getChannelWithIP(ip));
             MessageSenderService messageSender = new MessageSenderService();
 

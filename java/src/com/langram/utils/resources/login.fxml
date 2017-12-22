@@ -17,12 +17,7 @@
          </font>
       </Label>
     </Pane>
-    <Button fx:id="loginButton" defaultButton="true" layoutX="203.0" layoutY="389.0" mnemonicParsing="false" onAction="#login" prefHeight="45.0" prefWidth="135.0" style="-fx-background-color: white; -fx-background-radius: 8; -fx-border-color: #796eff; -fx-border-radius: 8; -fx-text-fill: #796eff; -fx-border-width: 2;" textAlignment="CENTER" textFill="WHITE">
-        <font>
-            <Font name="Lato Regular" size="16.0" />
-        </font>
-    </Button>
-    <Button fx:id="registerButton" layoutX="27.0" layoutY="389.0" mnemonicParsing="false" prefHeight="45.0" prefWidth="135.0" style="-fx-text-fill: #796eff; -fx-background-color: white; -fx-background-radius: 8; -fx-border-color: #796eff; -fx-border-radius: 8; -fx-border-width: 2;" textAlignment="CENTER" textFill="WHITE">
+    <Button fx:id="loginButton" defaultButton="true" layoutX="203.0" layoutY="389.0" mnemonicParsing="false" onAction="#login" prefHeight="45.0" style="-fx-background-color: white; -fx-background-radius: 8; -fx-border-color: #796eff; -fx-border-radius: 8; -fx-text-fill: #796eff; -fx-border-width: 2;" textAlignment="CENTER" textFill="WHITE" AnchorPane.leftAnchor="100.0" AnchorPane.rightAnchor="100.0">
         <font>
             <Font name="Lato Regular" size="16.0" />
         </font>
