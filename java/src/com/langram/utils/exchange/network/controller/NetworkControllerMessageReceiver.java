@@ -8,6 +8,7 @@ import com.langram.utils.exchange.network.MessageReceiverTask;
 import com.langram.utils.exchange.network.MessageSenderService;
 import com.langram.utils.messages.ControlMessage;
 import com.langram.utils.messages.Message;
+import javafx.util.Pair;
 
 import java.net.DatagramSocket;
 import java.net.SocketException;
@@ -42,24 +43,11 @@ class NetworkControllerMessageReceiver {
                     }
                     break;
                 case AskIPForUnicastMessage:
-                    if (controlMessage.getContent().equals(User.getInstance().getUsername())) {
-                        try {
-                            // Getting a free port
-                            DatagramSocket socket = new DatagramSocket();
-                            String address = socket.getLocalAddress().toString().substring(1);
-                            int port = socket.getLocalPort();
-                            socket.close();
-                            // Create listener
-                            MessageReceiverTask messageReceiverTask = new MessageReceiverTask(MessageSenderService.SendingMode.UNICAST, address, port, TON_LISTENER_POUR_LES_UNICAST);
-                            // TODO : ajouter la task à un thread pool
-                            // TODO : vérifier qu'il y'ait pas un thread existant
-                            // Ca dépend si tu veux un même listener pour les unicast ou si tu veux un différent donc faudra adapter le code
-                            // Reply with address and port
-                            response = new ControlMessage(ReplyIPForUnicastMessage, address + ":" + port);
-                            NetworkController.getInstance().reply(senderAddress, response);
-                        } catch (UnknownHostException | SocketException e) {
-                            e.printStackTrace();
-                        }
+                    String username = User.getInstance().getUsername();
+                    if (controlMessage.getContent().equals(username)) {
+                        Pair<String, Integer> data = MainController.getInstance().createListeningThread(username);
+                        response = new ControlMessage(ReplyIPForUnicastMessage, data.getKey() + ":" + data.getValue());
+                        NetworkController.getInstance().reply(senderAddress, response);
                     }
                 default:
                     break;

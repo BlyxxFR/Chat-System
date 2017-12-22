@@ -18,7 +18,7 @@ public class Login extends App {
 
         // Get App name and title locale
         ResourceBundle globalMessages = ResourceBundle.getBundle("GlobalMessagesBundle", Settings.getInstance().getLocale());
-        stage.setTitle(Settings.getInstance().getAppName() + " - " + globalMessages.getString("titleLoginWindow"));
+        stage.setTitle(Settings.getInstance().getAppName() + " - " + globalMessages.getString("title_login_window"));
 
         // Show the stage
         stage.show();

@@ -35,12 +35,13 @@ public class NetworkControllerAction {
         return parseUsersFromReplies(NetworkController.getInstance().sendAndGetReplies(BROADCAST_IP, message));
     }
 
-    public String getIpAndPortToDiscussWithAnUser(String username) throws UtilisateurHorsLigne {
-        ArrayList<ControlMessage>replies = NetworkController.getInstance().sendAndGetReplies(BROADCAST_IP, message);
+    public String getIpAndPortToDiscussWithAnUser(String username) throws Exception {
+        Message message = new ControlMessage(AskIPForUnicastMessage, username);
+        ArrayList<ControlMessage> replies = NetworkController.getInstance().sendAndGetReplies(BROADCAST_IP, message);
         if(replies.size() > 0) {
-            return replies.get(0);
+            return replies.get(0).getContent();
         }
-        throw new UtilisateurHorsLigne;
+        throw new Exception();
     }
 
     private ArrayList<String> parseUsersFromReplies(ArrayList<ControlMessage> replies) {

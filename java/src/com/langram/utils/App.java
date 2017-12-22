@@ -42,7 +42,7 @@ public abstract class App extends Application {
             stage.setWidth(width);
             stage.setHeight(height);
         }
-        stage.setTitle(Settings.getInstance().getAppName() + " - " + globalMessages.getString("titleWindow"));
+        stage.setTitle(Settings.getInstance().getAppName() + " - " + globalMessages.getString("title_window"));
         if(!this.isMaximized) {
             registerMouseEvents(root);
             if (!doNotResize.contains(resource))
