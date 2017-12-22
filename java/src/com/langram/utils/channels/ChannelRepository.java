@@ -148,9 +148,9 @@ public class ChannelRepository implements RepositoryInterface<Channel> {
     public void switchToChannel(String channelName) {
         try {
             Statement stmt = db.connect().createStatement();
-            stmt.execute("UPDATE channel SET active = 0 WHERE active = 1");
+            stmt.execute("UPDATE channel SET active = 0 WHERE active = 1 AND isPrivate = 0");
             stmt.close();
-            PreparedStatement pstmt = db.connect().prepareStatement("UPDATE channel SET active = 1 WHERE channelName = ?");
+            PreparedStatement pstmt = db.connect().prepareStatement("UPDATE channel SET active = 1 WHERE channelName = ? AND isPrivate = 0");
             pstmt.setString(1, channelName);
             pstmt.execute();
             pstmt.close();

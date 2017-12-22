@@ -105,6 +105,7 @@ public class MainController extends CommonController implements javafx.fxml.Init
         }
         projectsList.getItems().sort(String::compareToIgnoreCase);
         Channel currentChannel = ChannelRepository.getInstance().getCurrentChannel();
+
         if(currentChannel != null)
             this.goToChannel(currentChannel.getChannelName());
     }
@@ -221,7 +222,8 @@ public class MainController extends CommonController implements javafx.fxml.Init
     }
 
     public void goToChannel() {
-        this.goToChannel(projectsList.getSelectionModel().getSelectedItems().get(0));
+        if(projectsList.getSelectionModel().getSelectedItems().size() > 0)
+            this.goToChannel(projectsList.getSelectionModel().getSelectedItems().get(0));
     }
 
     private void goToChannel(String selectedChannel) {
@@ -243,7 +245,7 @@ public class MainController extends CommonController implements javafx.fxml.Init
             );
 
             ChannelRepository.getInstance().switchToChannel(selectedChannel);
-            ArrayList<Message> messages = MessageRepository.getInstance().retrieveMessageFromChannel(ChannelRepository.getInstance().getChannelUUID(selectedChannel).toString());
+            ArrayList<Message> messages = MessageRepository.getInstance().retrieveMessagesFromChannel(ChannelRepository.getInstance().getChannelUUID(selectedChannel));
             messagesList.getItems().addAll(messages);
 
             if(!listeningChannels.contains(selectedChannel)) {
@@ -284,34 +286,38 @@ public class MainController extends CommonController implements javafx.fxml.Init
 
     public void goToPrivateMessages()
     {
-        String user = connectedUsersList.getSelectionModel().getSelectedItems().get(0);
-        this.sendMessage.setOnMouseClicked(event -> sendPrivateMessage(user));
+        if(connectedUsersList.getSelectionModel().getSelectedItems().size() > 0) {
+            String user = connectedUsersList.getSelectionModel().getSelectedItems().get(0);
+            this.sendMessage.setOnMouseClicked(event -> sendPrivateMessage(user));
 
-        if(!this.privateConversations.containsKey(user))
-        {
-            try {
-                String ipPort = NetworkControllerAction.getInstance().getIpAndPortToDiscussWithAnUser(user);
+            if(!this.privateConversations.containsKey(user))
+            {
+                System.out.println("Chibre");
+                try {
+                    String ipPort = NetworkControllerAction.getInstance().getIpAndPortToDiscussWithAnUser(user);
 
-                String ip = ipPort.split("/")[1].split(":")[0];
-                String port = ipPort.split("/")[1].split(":")[1];
+                    String ip = ipPort.split("/")[1].split(":")[0];
+                    String port = ipPort.split("/")[1].split(":")[1];
 
-                privateConversations.put(user, new Pair<>(ip, Integer.valueOf(port)));
-                Channel c = new Channel(user, ip);
-                ChannelRepository.getInstance().store(c, true);
+                    privateConversations.put(user, new Pair<>(ip, Integer.valueOf(port)));
+                    Channel c = new Channel(user, ip);
+                    ChannelRepository.getInstance().store(c, true);
+                    System.out.println(c.getChannelName());
 
-            } catch (Exception e) {
-                e.printStackTrace();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
+
+            sendingArea.setDisable(false);
+            textMessage.setPromptText(String.format(mainMessages.getString("prompt"), user));
+            channelName.setText(user);
+
+            this.messagesList.getItems().clear();
+            System.out.println(ChannelRepository.getInstance().getChannelUUID(user));
+            ArrayList<Message> messages = MessageRepository.getInstance().retrieveMessagesFromChannel(ChannelRepository.getInstance().getChannelUUID(user));
+            messagesList.getItems().addAll(messages);
         }
-
-        sendingArea.setDisable(false);
-        textMessage.setPromptText(String.format(mainMessages.getString("prompt"), user));
-        channelName.setText(user);
-
-        this.messagesList.getItems().clear();
-
-        ArrayList<Message> messages = MessageRepository.getInstance().retrieveMessageFromChannel(ChannelRepository.getInstance().getChannelUUID(user).toString());
-        messagesList.getItems().addAll(messages);
     }
 
     private void sendPrivateMessage(String user)
