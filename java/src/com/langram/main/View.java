@@ -9,7 +9,7 @@ import javafx.util.Pair;
 
 import java.util.ResourceBundle;
 
-class MainView {
+class View {
 
     static class AddChannelDialog {
         private Dialog<Pair<String, String>> dialog;

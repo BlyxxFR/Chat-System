@@ -1,6 +1,6 @@
 package com.langram.utils.exchange.network.controller;
 
-import com.langram.main.MainController;
+import com.langram.main.Controller;
 import com.langram.utils.User;
 import com.langram.utils.channels.ChannelRepository;
 import com.langram.utils.exchange.network.IncomingMessageListener;
@@ -32,17 +32,18 @@ class NetworkControllerMessageReceiver {
                         response = new ControlMessage(AcknowledgeNewConnection, User.getInstance().getUsername());
                         if (!User.getInstance().getUsername().equals(controlMessage.getSenderName()))
                             NetworkController.getInstance().reply(senderAddress, response);
-                        MainController.getInstance().addAnUserToActiveChannelConnectedUsersList(controlMessage.getSenderName());
+                        Controller.getInstance().addAnUserToActiveChannelConnectedUsersList(controlMessage.getSenderName());
                     }
                     break;
                 case AskIPForUnicastMessage:
                     String username = User.getInstance().getUsername();
                     if (controlMessage.getContent().equals(username)) {
-                        Pair<String, Integer> data = MainController.getInstance().createListeningThread(username);
+                        Pair<String, Integer> data = Controller.getInstance().createListeningThread(username);
                         response = new ControlMessage(ReplyIPForUnicastMessage, data.getKey() + ":" + data.getValue());
                         NetworkController.getInstance().reply(senderAddress, response);
                         ChannelRepository.getInstance().updateChannelIP(controlMessage.getContent(), senderAddress);
                     }
+                    break;
                 default:
                     break;
             }

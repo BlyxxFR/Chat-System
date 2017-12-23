@@ -15,10 +15,7 @@ import com.langram.utils.exchange.network.MessageSenderService;
 import com.langram.utils.exchange.network.controller.NetworkController;
 import com.langram.utils.exchange.network.controller.NetworkControllerAction;
 import com.langram.utils.exchange.network.exception.UnsupportedSendingModeException;
-import com.langram.utils.messages.FileMessage;
-import com.langram.utils.messages.Message;
-import com.langram.utils.messages.MessageDisplay;
-import com.langram.utils.messages.TextMessage;
+import com.langram.utils.messages.*;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import javafx.application.Platform;
 import javafx.scene.control.Label;
@@ -35,9 +32,11 @@ import java.util.ResourceBundle;
 
 import static com.langram.utils.exchange.network.MessageSenderService.MULTICAST_PORT_LISTENER;
 import static com.langram.utils.exchange.network.MessageSenderService.SendingMode.MULTICAST;
+import static com.langram.utils.exchange.network.controller.NetworkControllerMessageType.CheckIfUserIsOnline;
+import static com.langram.utils.exchange.network.controller.NetworkControllerMessageType.ReplyUserOnline;
 import static java.util.concurrent.TimeUnit.SECONDS;
 
-public class MainController extends CommonController implements javafx.fxml.Initializable {
+public class Controller extends CommonController implements javafx.fxml.Initializable {
 
     public Label projectsLabel;
     public JFXTextArea textMessage;
@@ -55,7 +54,7 @@ public class MainController extends CommonController implements javafx.fxml.Init
 
     private ResourceBundle mainMessages;
 
-    private static MainController instance;
+    private static Controller instance;
     private ArrayList<String> listeningChannels = new ArrayList<>();
     private HashMap<String, Integer> listeningPrivateChannels = new HashMap<>();
 
@@ -100,112 +99,16 @@ public class MainController extends CommonController implements javafx.fxml.Init
 
         if (currentChannel != null)
             this.goToChannel(currentChannel.getChannelName());
+
+        // Send not sent messages thread
+        sendNotSentMessages();
     }
 
-    public static MainController getInstance() {
+    public static Controller getInstance() {
         return instance;
     }
 
-    public class onReceivedMessage implements IncomingMessageListener {
-        public void onNewIncomingMessage(final Message message, String senderAddress, int senderPort) {
-            Platform.runLater(
-                    () -> {
-                        if (message instanceof TextMessage || message instanceof FileMessage) {
-                            Channel msgChannel = ChannelRepository.getInstance().getChannelWithIP(message.getChannel().getIpAddress());
-                            message.updateChannel(msgChannel);
-                            MessageRepository.getInstance().store(message, true);
-                            if (ChannelRepository.getInstance().isActiveChannel(message.getChannel().getIpAddress())) {
-                                messagesList.getItems().add(message);
-                                messagesList.scrollTo(message);
-                            }
-                        }
-                    }
-            );
-        }
-    }
-
-    public class onReceivedPrivateMessage implements IncomingMessageListener {
-        public void onNewIncomingMessage(final Message incommingMessage, String senderAddress, int senderPort) {
-            Platform.runLater(
-                    () -> {
-                        if (incommingMessage.getMessageType() == Message.MessageType.TEXT_MESSAGE) {
-                            TextMessage message = (TextMessage) incommingMessage;
-                            String channelIP = ChannelRepository.getInstance().getChannelIP(message.getSenderName());
-                            Channel channel;
-
-                            if (channelIP != null && channelIP.equals(senderAddress)) {
-                                channel = ChannelRepository.getInstance().getChannelWithIP(channelIP);
-                            } else {
-                                channel = new Channel(message.getSenderName(), senderAddress);
-                                ChannelRepository.getInstance().store(channel, true);
-                            }
-
-                            message.updateChannel(channel);
-                            MessageRepository.getInstance().store(message, true);
-
-                            messagesList.getItems().add(message);
-                            messagesList.scrollTo(message);
-                        }
-                    }
-            );
-        }
-    }
-
-    public void addAnUserToActiveChannelConnectedUsersList(final String username) {
-        Platform.runLater(
-                () -> {
-                    if (!connectedUsersList.getItems().contains(username)) {
-                        connectedUsersList.getItems().add(username);
-                        connectedUsersList.getItems().sort(String::compareToIgnoreCase);
-                    }
-                }
-        );
-    }
-
-    private void getConnectedUsersListOnActiveChannelPeriodically() {
-        final Runnable getConnectedUsersList = (() -> {
-
-            if (ChannelRepository.getInstance().getCurrentChannel() != null) {
-                Platform.runLater(() -> {
-                            ArrayList<String> connectedUsers = NetworkControllerAction.getInstance().getConnectedUsersToAChannel(ChannelRepository.getInstance().getCurrentChannel().getIpAddress());
-                            connectedUsersList.getItems().clear();
-                            connectedUsersList.getItems().addAll(connectedUsers);
-                        }
-                );
-            }
-
-        });
-
-        scheduler.scheduleAtFixedRate(getConnectedUsersList, 2 * 60, 2 * 60, SECONDS);
-    }
-
-    public void addProjectChannel() {
-        // Generate dialog box
-        MainView.AddChannelDialog dialog = new MainView.AddChannelDialog();
-
-        // Request focus on the username field by default.
-        Platform.runLater(() -> dialog.getNameField().requestFocus());
-
-        // Convert the result to a username-password-pair when the login button is clicked.
-        dialog.get().setResultConverter(dialogButton -> {
-            if (dialogButton == dialog.getAddButton()) {
-                return new Pair<>(dialog.getNameField().getText(), dialog.getIpField().getText());
-            }
-            return null;
-        });
-
-        Optional<Pair<String, String>> result = dialog.get().showAndWait();
-
-        result.ifPresent(pair -> {
-            IPAddressValidator ipAddressValidator = new IPAddressValidator();
-            if (ipAddressValidator.validate(pair.getValue()) && !ChannelRepository.getInstance().isConnectedToChannel(pair.getValue())) {
-                projectsList.getItems().add(pair.getKey());
-                ChannelRepository.getInstance().store(new Channel(pair.getKey(), pair.getValue()));
-            }
-        });
-        projectsList.getItems().sort(String::compareToIgnoreCase);
-    }
-
+    // Change channel methods
     public void goToChannel() {
         if (projectsList.getSelectionModel().getSelectedItems().size() > 0)
             this.goToChannel(projectsList.getSelectionModel().getSelectedItems().get(0));
@@ -232,6 +135,8 @@ public class MainController extends CommonController implements javafx.fxml.Init
             ChannelRepository.getInstance().switchToChannel(selectedChannel);
             ArrayList<Message> messages = MessageRepository.getInstance().retrieveMessagesFromChannel(ChannelRepository.getInstance().getChannelUUID(selectedChannel));
             messagesList.getItems().addAll(messages);
+            if(messagesList.getItems().size() > 0)
+                messagesList.scrollTo(messagesList.getItems().size()-1);
 
             if (!listeningChannels.contains(selectedChannel)) {
                 threadsPool.submit(new MessageReceiverTask(MULTICAST, ChannelRepository.getInstance().getCurrentChannel().getIpAddress(), MULTICAST_PORT_LISTENER, new onReceivedMessage()).get());
@@ -243,30 +148,6 @@ public class MainController extends CommonController implements javafx.fxml.Init
             textMessage.setPromptText(String.format(mainMessages.getString("prompt"), selectedChannel));
             channelName.setText(selectedChannel);
         }
-    }
-
-    public Pair<String, Integer> createListeningThread(String username) {
-        // Getting a free port
-        DatagramSocket socket;
-        try {
-            socket = new DatagramSocket();
-            String address = String.valueOf(InetAddress.getLocalHost());
-            int port = socket.getLocalPort();
-            socket.close();
-
-            if (listeningPrivateChannels.containsKey(username)) {
-                return new Pair<>(address, listeningPrivateChannels.get(username));
-            }
-
-            MessageReceiverTask messageReceiverTask = new MessageReceiverTask(MessageSenderService.SendingMode.UNICAST, "127.0.0.1", port, new onReceivedPrivateMessage());
-            threadsPool.submit(messageReceiverTask.get());
-            return new Pair<>(address, port);
-
-        } catch (SocketException | UnknownHostException e) {
-            e.printStackTrace();
-        }
-
-        return new Pair<>(null, null);
     }
 
     public void goToPrivateMessages() {
@@ -302,6 +183,22 @@ public class MainController extends CommonController implements javafx.fxml.Init
         }
     }
 
+    // Message sender
+    private boolean checkIfMessageIsSent(String ip, int port, String user, Message message) {
+        boolean sent = true;
+        MessageSenderService messageSender = new MessageSenderService();
+        try {
+            if (NetworkControllerAction.getInstance().checkIfUserIsOnline(user, ip, port)) {
+                messageSender.sendMessageOn(ip, port, MessageSenderService.SendingMode.UNICAST, message);
+            } else {
+                sent = false;
+            }
+        } catch (Exception | UnsupportedSendingModeException e) {
+            sent = false;
+        }
+        return sent;
+    }
+
     private void sendPrivateMessage(String user) {
         String ip = this.privateConversations.get(user).getKey();
         Integer port = this.privateConversations.get(user).getValue();
@@ -309,29 +206,14 @@ public class MainController extends CommonController implements javafx.fxml.Init
 
         if (!text.isEmpty()) {
             Message message = new TextMessage(User.getInstance().getUsername(), text, ChannelRepository.getInstance().getChannelWithIP(ip));
-            MessageSenderService messageSender = new MessageSenderService();
-
-            try {
-                boolean sent = true;
-                if (!user.equals(User.getInstance().getUsername())) {
-                    try {
-                        if(NetworkControllerAction.getInstance().isAnUsernameAvailable(user)) {
-                            sent = false;
-                        } else {
-                            messageSender.sendMessageOn(ip, port, MessageSenderService.SendingMode.UNICAST, message);
-                        }
-                    } catch (Exception e) {
-                        sent = false;
-                    }
-                }
-                messagesList.getItems().add(message);
-                messagesList.scrollTo(message);
-                message.updateChannel(ChannelRepository.getInstance().getChannelWithName(user));
-                MessageRepository.getInstance().store(message, sent);
-            } catch (UnsupportedSendingModeException e) {
-                e.printStackTrace();
+            boolean sent = true;
+            if (!user.equals(User.getInstance().getUsername())) {
+                sent = checkIfMessageIsSent(ip, port, user, message);
             }
-
+            messagesList.getItems().add(message);
+            messagesList.scrollTo(message);
+            message.updateChannel(ChannelRepository.getInstance().getChannelWithName(user));
+            MessageRepository.getInstance().store(message, sent);
             this.textMessage.setText("");
         }
     }
@@ -348,5 +230,178 @@ public class MainController extends CommonController implements javafx.fxml.Init
             textMessage.setText("");
         }
     }
+
+    // Message receivers
+    public class onReceivedMessage implements IncomingMessageListener {
+        public void onNewIncomingMessage(final Message message, String senderAddress, int senderPort) {
+            Platform.runLater(
+                    () -> {
+                        if (message instanceof TextMessage || message instanceof FileMessage) {
+                            displayTray(String.format(mainMessages.getString("notification_multicast"), message.getChannel().getChannelName()));
+                            Channel msgChannel = ChannelRepository.getInstance().getChannelWithIP(message.getChannel().getIpAddress());
+                            message.updateChannel(msgChannel);
+                            MessageRepository.getInstance().store(message, true);
+                            if (ChannelRepository.getInstance().isActiveChannel(message.getChannel().getIpAddress())) {
+                                messagesList.getItems().add(message);
+                                messagesList.scrollTo(message);
+                            }
+                        }
+                    }
+            );
+        }
+    }
+
+    public class onReceivedPrivateMessage implements IncomingMessageListener {
+        public void onNewIncomingMessage(final Message incommingMessage, String senderAddress, int senderPort) {
+            Platform.runLater(
+                    () -> {
+                        if (incommingMessage.getMessageType() == Message.MessageType.CONTROL_MESSAGE) {
+                            ControlMessage message = (ControlMessage) incommingMessage;
+                            if (message.getControlType() == CheckIfUserIsOnline && message.getContent().equals(User.getInstance().getUsername())) {
+                                ControlMessage response = new ControlMessage(ReplyUserOnline, "OK");
+                                NetworkController.getInstance().reply(senderAddress, response);
+                            }
+                        }
+                        if (incommingMessage.getMessageType() == Message.MessageType.TEXT_MESSAGE) {
+                            displayTray(String.format(mainMessages.getString("notification_unicast"), incommingMessage.getChannel().getChannelName()));
+                            TextMessage message = (TextMessage) incommingMessage;
+                            String channelIP = ChannelRepository.getInstance().getChannelIP(message.getSenderName());
+                            Channel channel;
+
+                            if (channelIP != null && channelIP.equals(senderAddress)) {
+                                channel = ChannelRepository.getInstance().getChannelWithIP(channelIP);
+                            } else {
+                                channel = new Channel(message.getSenderName(), senderAddress);
+                                ChannelRepository.getInstance().store(channel, true);
+                            }
+
+                            message.updateChannel(channel);
+                            MessageRepository.getInstance().store(message, true);
+
+                            messagesList.getItems().add(message);
+                            messagesList.scrollTo(message);
+                        }
+                    }
+            );
+        }
+    }
+
+    // Misc
+    public void addAnUserToActiveChannelConnectedUsersList(final String username) {
+        Platform.runLater(
+                () -> {
+                    if (!connectedUsersList.getItems().contains(username)) {
+                        connectedUsersList.getItems().add(username);
+                        connectedUsersList.getItems().sort(String::compareToIgnoreCase);
+                    }
+                }
+        );
+    }
+
+    private void getConnectedUsersListOnActiveChannelPeriodically() {
+        final Runnable getConnectedUsersList = (() -> {
+
+            if (ChannelRepository.getInstance().getCurrentChannel() != null) {
+                Platform.runLater(() -> {
+                            ArrayList<String> connectedUsers = NetworkControllerAction.getInstance().getConnectedUsersToAChannel(ChannelRepository.getInstance().getCurrentChannel().getIpAddress());
+                            connectedUsersList.getItems().clear();
+                            connectedUsersList.getItems().addAll(connectedUsers);
+                        }
+                );
+            }
+
+        });
+
+        scheduler.scheduleAtFixedRate(getConnectedUsersList, 2 * 60, 2 * 60, SECONDS);
+    }
+
+    public void addProjectChannel() {
+        // Generate dialog box
+        View.AddChannelDialog dialog = new View.AddChannelDialog();
+
+        // Request focus on the username field by default.
+        Platform.runLater(() -> dialog.getNameField().requestFocus());
+
+        // Convert the result to a username-password-pair when the login button is clicked.
+        dialog.get().setResultConverter(dialogButton -> {
+            if (dialogButton == dialog.getAddButton()) {
+                return new Pair<>(dialog.getNameField().getText(), dialog.getIpField().getText());
+            }
+            return null;
+        });
+
+        Optional<Pair<String, String>> result = dialog.get().showAndWait();
+
+        result.ifPresent(pair -> {
+            IPAddressValidator ipAddressValidator = new IPAddressValidator();
+            if (ipAddressValidator.validate(pair.getValue()) && !ChannelRepository.getInstance().isConnectedToChannel(pair.getValue())) {
+                projectsList.getItems().add(pair.getKey());
+                ChannelRepository.getInstance().store(new Channel(pair.getKey(), pair.getValue()));
+            }
+        });
+        projectsList.getItems().sort(String::compareToIgnoreCase);
+    }
+
+    public Pair<String, Integer> createListeningThread(String username) {
+        // Getting a free port
+        DatagramSocket socket;
+        try {
+            socket = new DatagramSocket();
+            String address = String.valueOf(InetAddress.getLocalHost());
+            int port = socket.getLocalPort();
+            socket.close();
+
+            if (listeningPrivateChannels.containsKey(username)) {
+                return new Pair<>(address, listeningPrivateChannels.get(username));
+            }
+
+            MessageReceiverTask messageReceiverTask = new MessageReceiverTask(MessageSenderService.SendingMode.UNICAST, "127.0.0.1", port, new onReceivedPrivateMessage());
+            threadsPool.submit(messageReceiverTask.get());
+            return new Pair<>(address, port);
+
+        } catch (SocketException | UnknownHostException e) {
+            e.printStackTrace();
+        }
+
+        return new Pair<>(null, null);
+    }
+
+    private void sendNotSentMessages() {
+        final Runnable sendNotSentMessagesThread = (() -> {
+
+            if (ChannelRepository.getInstance().getCurrentChannel() != null) {
+                Platform.runLater(() -> {
+                            ArrayList<Message> notSentMessages = MessageRepository.getInstance().retrieveNotSentMessages();
+                            MessageSenderService messageSender = new MessageSenderService();
+                            for (Message message : notSentMessages) {
+                                if (message instanceof TextMessage) {
+                                    TextMessage textMessage = (TextMessage) message;
+                                    try {
+                                        Channel channel = message.getChannel();
+                                        IPAddressValidator ipAddressValidator = new IPAddressValidator();
+                                        if (ipAddressValidator.validate(channel.getIpAddress())) {
+                                            messageSender.sendMessageOn(channel.getIpAddress(), MULTICAST_PORT_LISTENER, MessageSenderService.SendingMode.MULTICAST, message);
+                                            MessageRepository.getInstance().updateSentStatus(textMessage.getUUID(), true);
+                                        } else {
+                                            if (privateConversations.containsKey(textMessage.getChannel().getChannelName())) {
+                                                Pair<String, Integer> ipAndPort = privateConversations.get(textMessage.getChannel().getChannelName());
+                                                boolean sent = checkIfMessageIsSent(ipAndPort.getKey(), ipAndPort.getValue(), textMessage.getChannel().getChannelName(), textMessage);
+                                                MessageRepository.getInstance().updateSentStatus(textMessage.getUUID(), sent);
+                                            }
+                                        }
+                                    } catch (UnsupportedSendingModeException | IOException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            }
+                        }
+                );
+            }
+
+        });
+
+        scheduler.scheduleAtFixedRate(sendNotSentMessagesThread, 0, 5 * 60, SECONDS);
+    }
+
 }
 

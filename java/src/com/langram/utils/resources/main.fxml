@@ -10,7 +10,7 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
-<AnchorPane prefHeight="768.0" prefWidth="1024.0" style="-fx-background-color: #EEEEEE;" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.langram.main.MainController">
+<AnchorPane prefHeight="768.0" prefWidth="1024.0" style="-fx-background-color: #EEEEEE;" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.langram.main.Controller">
     <AnchorPane prefHeight="68.0" prefWidth="275.0" style="-fx-background-color: #013243;" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="25.0">
         <ImageView fx:id="profileImage" fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="10.0">
             <Image url="@images/default-user.png" />

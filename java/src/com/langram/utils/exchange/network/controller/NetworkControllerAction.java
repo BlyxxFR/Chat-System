@@ -1,5 +1,6 @@
 package com.langram.utils.exchange.network.controller;
 
+import com.langram.utils.exchange.network.MessageSenderService;
 import com.langram.utils.messages.ControlMessage;
 import com.langram.utils.messages.Message;
 
@@ -53,4 +54,9 @@ public class NetworkControllerAction {
         return connectedUsers;
     }
 
+    public boolean checkIfUserIsOnline(String user, String ip, int port) {
+        Message message = new ControlMessage(CheckIfUserIsOnline, user);
+        ArrayList<ControlMessage> replies = NetworkController.getInstance().sendAndGetReplies(ip, port, MessageSenderService.SendingMode.UNICAST, message);
+        return replies.size() > 0;
+    }
 }

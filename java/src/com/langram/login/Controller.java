@@ -15,7 +15,7 @@ import javafx.scene.paint.Color;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class LoginController extends CommonController implements javafx.fxml.Initializable {
+public class Controller extends CommonController implements javafx.fxml.Initializable {
 
     private ResourceBundle loginMessages = ResourceBundle.getBundle("LoginMessagesBundle", Settings.getInstance().getLocale());
     public JFXTextField usernameText;

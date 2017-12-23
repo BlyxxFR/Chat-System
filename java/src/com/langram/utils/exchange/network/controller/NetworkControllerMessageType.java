@@ -8,6 +8,8 @@ public enum NetworkControllerMessageType {
     NotifyConnectionToChannel,
     AcknowledgeNewConnection,
     AskIPForUnicastMessage,
+    CheckIfUserIsOnline,
+    ReplyUserOnline,
     ReplyIPForUnicastMessage
 }
 

@@ -2,6 +2,7 @@ package com.langram.utils;
 
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 
+import java.awt.*;
 import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.concurrent.ExecutorService;
@@ -10,13 +11,11 @@ import java.util.concurrent.ScheduledExecutorService;
 
 public class CommonController implements javafx.fxml.Initializable {
 
-    private static ResourceBundle globalMessages = ResourceBundle.getBundle("GlobalMessagesBundle", Settings.getInstance().getLocale());;
     public FontAwesomeIconView maximizeButton;
     public FontAwesomeIconView closeButton;
-    public FontAwesomeIconView settingsButton;
 
     protected final ExecutorService threadsPool = Executors.newCachedThreadPool();
-    protected final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+    protected final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(2);
 
     public CommonController() {
         // Clean exit thread when application shutdown
@@ -31,10 +30,6 @@ public class CommonController implements javafx.fxml.Initializable {
 
     }
 
-    public static ResourceBundle getGlobalMessagesBundle() {
-        return globalMessages;
-    }
-
     public void closeApplication() {
         System.exit(0);
     }
@@ -44,6 +39,18 @@ public class CommonController implements javafx.fxml.Initializable {
         maximizeButton.setGlyphName(status ? "WINDOW_MINIMIZE" : "WINDOW_MAXIMIZE");
     }
 
-    public void openSettings() {}
+    public void displayTray(String text) {
+        try {
+            SystemTray tray = SystemTray.getSystemTray();
+            Image image = Toolkit.getDefaultToolkit().createImage(getClass().getResource("/com/langram/utils/resources/images/logo-mini.png"));
+            TrayIcon trayIcon = new TrayIcon(image, Settings.getInstance().getAppName());
+            trayIcon.setImageAutoSize(true);
+            trayIcon.setToolTip(Settings.getInstance().getAppName());
+            tray.add(trayIcon);
+            trayIcon.displayMessage(Settings.getInstance().getAppName(), text, TrayIcon.MessageType.INFO);
+        } catch (AWTException e) {
+            e.printStackTrace();
+        }
+    }
 
 }

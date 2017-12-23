@@ -33,19 +33,21 @@ public class NetworkController {
     }
 
     ArrayList<ControlMessage> sendAndGetReplies(String ipAddress, Message message) {
+        return sendAndGetReplies(ipAddress, MULTICAST_PORT_LISTENER, MessageSenderService.SendingMode.MULTICAST, message);
+    }
+
+    ArrayList<ControlMessage> sendAndGetReplies(String ip, int port, MessageSenderService.SendingMode sendingMode, Message message) {
         MessageSenderService messageSender = new MessageSenderService();
         ArrayList<ControlMessage> replies = new ArrayList<>();
-
         try {
-            replies = messageSender.sendMessageOnAndListenForReply(ipAddress, MULTICAST_PORT_LISTENER, MessageSenderService.SendingMode.MULTICAST, message);
+            replies = messageSender.sendMessageOnAndListenForReply(ip, port, sendingMode, message);
         } catch (UnsupportedSendingModeException | IOException e) {
             e.printStackTrace();
         }
-
         return replies;
     }
 
-    void reply(String senderAddress, Message message) {
+    public void reply(String senderAddress, Message message) {
         MessageSenderService messageSender = new MessageSenderService();
         try {
             messageSender.sendMessageOn(senderAddress, CONTROL_PORT_LISTENER, MessageSenderService.SendingMode.UNICAST, message);
