@@ -180,6 +180,18 @@ public class Controller extends CommonController implements javafx.fxml.Initiali
             this.messagesList.getItems().clear();
             ArrayList<Message> messages = MessageRepository.getInstance().retrieveMessagesFromChannel(ChannelRepository.getInstance().getChannelUUID(user));
             messagesList.getItems().addAll(messages);
+
+            (new Thread(
+                    () -> {
+                        Platform.runLater(
+                                () -> {
+                                    if(messagesList.getItems().size() > 0)
+                                        messagesList.scrollTo(messagesList.getItems().size()-1);
+                                }
+                        );
+                    }
+            )).start();
+
         }
     }
 
@@ -263,7 +275,6 @@ public class Controller extends CommonController implements javafx.fxml.Initiali
                             }
                         }
                         if (incommingMessage.getMessageType() == Message.MessageType.TEXT_MESSAGE) {
-                            displayTray(String.format(mainMessages.getString("notification_unicast"), incommingMessage.getChannel().getChannelName()));
                             TextMessage message = (TextMessage) incommingMessage;
                             String channelIP = ChannelRepository.getInstance().getChannelIP(message.getSenderName());
                             Channel channel;
@@ -278,8 +289,12 @@ public class Controller extends CommonController implements javafx.fxml.Initiali
                             message.updateChannel(channel);
                             MessageRepository.getInstance().store(message, true);
 
-                            messagesList.getItems().add(message);
-                            messagesList.scrollTo(message);
+                            displayTray(String.format(mainMessages.getString("notification_unicast"), message.getChannel().getChannelName()));
+
+                            if (ChannelRepository.getInstance().isActiveChannel(message.getChannel().getIpAddress())) {
+                                messagesList.getItems().add(message);
+                                messagesList.scrollTo(message);
+                            }
                         }
                     }
             );
