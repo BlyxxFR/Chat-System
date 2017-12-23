@@ -2,12 +2,12 @@
 
 ### Ce qui marche
 
-..* Gestion des échanges des messages one-to-one
-..* Gestion de l'identification des utilisateurs connectés
-..* Gestion des échanges des messages one-to-many
-..* Historisation des échanges
-..* Gestions des cas particuliers (multiples lancements de l'application sur une même machine, envoi d'un message à un utilisateur qui vient de se déconnecter)
-..* Notification par le système lorsqu'un message est reçu (cf plus bas)
+* Gestion des échanges des messages one-to-one
+* Gestion de l'identification des utilisateurs connectés
+* Gestion des échanges des messages one-to-many
+* Historisation des échanges
+* Gestions des cas particuliers (multiples lancements de l'application sur une même machine, envoi d'un message à un utilisateur qui vient de se déconnecter)
+* Notification par le système lorsqu'un message est reçu (cf plus bas)
 
 ### Phase de connexion
 
